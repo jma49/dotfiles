@@ -40,11 +40,13 @@ export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib/native"
 
 
 # --- 第2节：Antidote 插件管理器 ---
-# 如果 Antidote 存在，就加载它
-[ -f ~/.antidote/antidote.zsh ] && source ~/.antidote/antidote.zsh || echo "Antidote not found"
-# 从插件列表文件加载所有插件
-[ -f ~/.zsh_plugins.txt ] && antidote load ~/.zsh_plugins.txt || echo "Plugins file not found"
+# Source Antidote from the Homebrew path
+[ -f "$(brew --prefix)/opt/antidote/share/antidote/antidote.zsh" ] && source "$(brew --prefix)/opt/antidote/share/antidote/antidote.zsh"
 
+autoload -U compinit && compinit
+
+# Load all plugins from our list file
+[ -f ~/.zsh_plugins.txt ] && antidote load ~/.zsh_plugins.txt 
 
 # --- 第3节：工具集成 ---
 # 这是让 starship, fzf, sdkman 等工具与 Shell 挂钩的地方
