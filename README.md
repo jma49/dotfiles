@@ -1,10 +1,12 @@
-## Quick Start
+# Quick Start
 
-# Clone the repository
+Clone this repository and run the setup script to begin.
 
-git clone https://github.com/jma49/dotfiles.git ~/dotfiles
+```bash
+# 1. Clone the repository
+git clone [https://github.com/jma49/dotfiles.git](https://github.com/jma49/dotfiles.git) ~/dotfiles
 
-# Run the setup script
+# 2. Run the setup script
+cd ~/dotfiles && ./install.sh
+```
 
-cd ~/dotfiles
-./install.sh
