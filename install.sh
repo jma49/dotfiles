@@ -12,14 +12,41 @@ set -e
 GITHUB_USERNAME="jma49"
 
 # List of applications to install via Homebrew.
-BREW_PACKAGES=(
+BREW_FORMULAE=(
+  # Core Tools
   "git"
   "stow"
+
+  # Main Applications
   "neovim"
-  "kitty"
   "yazi"
   "htop"
   "starship"
+
+  # Neovim Enhancements (for plugins like Telescope/fzf)
+  "fd"
+  "fzf"
+  "ripgrep"
+  "lazygit"
+
+  # File Preview Enhancements (for Yazi)
+  "bat"
+  "poppler"
+  "lsd"
+
+  # General CLI Utilities
+  "autojump"
+  "glow"
+  "tree"
+  "fastfetch"
+  ""
+)
+
+# List of GUI Apps and Fonts to install via Homebrew Casks
+BREW_CASKS=(
+  "kitty"
+  "font-fira-code" # A popular font for programming
+  "font-maple-mono-nf" # You use Maple Mono NF, which is great for icons
 )
 
 # --- Script ---
