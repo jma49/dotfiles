@@ -124,3 +124,4 @@ info "  [ -f \"\$(brew --prefix)/etc/profile.d/autojump.sh\" ] && . \"\$(brew --
 echo
 info "After that, restart your terminal for all changes to take effect."
 echo
+
