@@ -1,0 +1,12 @@
+# Zsh "三大神器" - 极大提升体验
+zsh-users/zsh-syntax-highlighting
+zsh-users/zsh-autosuggestions
+zsh-users/zsh-completions
+
+# 从 Oh My Zsh 迁移过来的插件
+# Antidote 可以智能地只加载 OMZ 仓库里的部分插件
+ohmyzsh/ohmyzsh path:plugins/git
+ohmyzsh/ohmyzsh path:plugins/vscode
+ohmyzsh/ohmyzsh path:plugins/web-search
+ohmyzsh/ohmyzsh path:plugins/you-should-use
+ohmyzsh/ohmyzsh path:plugins/poetry

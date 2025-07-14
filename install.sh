@@ -13,6 +13,7 @@ BREW_FORMULAE=(
   # Core Tools
   "git"
   "stow"
+  "antidote"
 
   # Main Applications
   "neovim"
