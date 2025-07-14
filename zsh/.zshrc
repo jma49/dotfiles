@@ -1,62 +1,96 @@
 #!/bin/zsh
 # -----------------------------------------------------------------------------
-# .zshrc - 一个整洁、快速、模块化的 Zsh 配置文件
+# .zshrc - A clean, fast, modular, and intelligent Zsh configuration.
+#
+# Author: Jincheng Ma
+# Last Updated: July 13, 2025
 # -----------------------------------------------------------------------------
 
-# --- 第1节：环境变量与PATH路径 ---
-# 首先加载密钥文件，这样后续的工具就能使用这些变量
+# --- Section 1: Environment & PATH Configuration ---
+
+# Load local secrets from ~/.local_secrets if the file exists.
+# This file is ignored by Git and should contain sensitive environment variables.
 [ -f ~/.local_secrets ] && source ~/.local_secrets
 
-export PATH="/opt/homebrew/bin"
-export PATH="$PATH:/opt/homebrew/sbin"
+# Manage PATH using an array for clarity, control, and to prevent duplicates.
+# The `typeset -U path` command ensures that each entry is unique.
+typeset -U path
+path=(
+  # Homebrew should be first to take precedence over system binaries.
+  /opt/homebrew/sbin
+  /opt/homebrew/bin
+)
 
-# Java
+# --- Conditionally Loaded Environments ---
+# Only add paths and environment variables for software that is actually installed.
+
+# Java environment, if installed via Homebrew/SDKMAN or at a known path.
 export JAVA_HOME="/Library/Java/JavaVirtualMachines/temurin-11.jdk/Contents/Home"
-export PATH="$PATH:$JAVA_HOME/bin"
+if [ -d "$JAVA_HOME" ]; then
+  path+=("$JAVA_HOME/bin")
+fi
 
-# Hadoop
-export HADOOP_HOME="/opt/homebrew/Cellar/hadoop/3.3.6/libexec"
-export PATH="$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin"
+# Hadoop environment, if installed via Homebrew.
+export HADOOP_HOME="$(brew --prefix)/opt/hadoop/libexec"
+if [ -d "$HADOOP_HOME" ]; then
+  path+=(
+    "$HADOOP_HOME/bin"
+    "$HADOOP_HOME/sbin"
+  )
+  export HADOOP_CONF_DIR="$HADOOP_HOME/etc/hadoop"
+  export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib/native"
+fi
 
-# MySQL & PostgreSQL
-export PATH="$PATH:/opt/homebrew/opt/mysql/bin"
-export PATH="$PATH:/opt/homebrew/opt/postgresql@16/bin"
+# MySQL client path, if installed via Homebrew.
+if [ -d "$(brew --prefix)/opt/mysql" ]; then
+  path+=("$(brew --prefix)/opt/mysql/bin")
+fi
 
-# 最后，追加系统默认的 PATH 路径
-export PATH="$PATH:$HOME/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+# PostgreSQL client path, if installed via Homebrew.
+if [ -d "$(brew --prefix)/opt/postgresql@16" ]; then
+  path+=("$(brew --prefix)/opt/postgresql@16/bin")
+fi
 
+# Finally, append the standard system paths.
+path+=(
+  $HOME/bin
+  /usr/local/bin
+  /usr/bin
+  /bin
+  /usr/sbin
+  /sbin
+)
 
-# 设置默认编辑器
+# --- General Environment Variables ---
+
+# Set the default editor for command-line tools.
 export EDITOR='nvim'
 export VISUAL='nvim'
 
-# 设置语言环境，防止乱码
+# Set the locale to prevent issues with character encoding.
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
-# Hadoop 相关的特定变量
-export HADOOP_CONF_DIR="$HADOOP_HOME/etc/hadoop"
-export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib/native"
+# --- Section 2: Plugin Manager (Antidote) ---
 
-
-# --- 第2节：Antidote 插件管理器 ---
-# Source Antidote from the Homebrew path
+# Source Antidote from the Homebrew path.
 [ -f "$(brew --prefix)/opt/antidote/share/antidote/antidote.zsh" ] && source "$(brew --prefix)/opt/antidote/share/antidote/antidote.zsh"
 
+# Initialize the Zsh completion system. This must be done before loading plugins.
 autoload -U compinit && compinit
 
-# Load all plugins from our list file
-[ -f ~/.zsh_plugins.txt ] && antidote load ~/.zsh_plugins.txt 
+# Load all plugins from the list file.
+[ -f ~/.zsh_plugins.txt ] && antidote load ~/.zsh_plugins.txt
 
-# --- 第3节：工具集成 ---
-# 这是让 starship, fzf, sdkman 等工具与 Shell 挂钩的地方
-# 这一部分应该靠近文件的末尾
+# --- Section 3: Tool Integrations ---
+# Initialize tools that need to hook into the shell. This section is best kept near the end.
 
-# Starship 提示符
+# Starship Prompt
 eval "$(starship init zsh)"
 
-# FZF (模糊搜索器)
+# FZF (Fuzzy Finder) - Key bindings and completions.
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# Use `fd` as the default command for FZF for better performance.
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --no-ignore --follow'
 
 # SDKMAN
@@ -64,13 +98,18 @@ export SDKMAN_DIR="$HOME/.sdkman"
 [ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
 
 
-# --- 第4节：命令别名 (Aliases) ---
+# --- Section 4: Aliases ---
+# Personal command shortcuts for efficiency.
+
+# Navigation
 alias ..='cd ..'
+
+# System Tools
+alias cat='bat' # Use `bat` instead of `cat` for syntax highlighting.
 alias c++='g++-14'
 alias gcc='gcc-14'
-alias cat='bat'
 
-# Git 别名
+# Git Aliases
 alias g='git'
 alias ga='git add'
 alias gaa='git add .'
@@ -84,9 +123,10 @@ alias gl='git log --oneline --graph --decorate'
 alias gpristine='git reset --hard && git clean -dffx'
 
 
-# --- 第5节：自定义函数 ---
+# --- Section 5: Custom Functions ---
+# More complex custom commands.
 
-# 'cd' 进入一个目录后，如果是新的 git 仓库，就运行 'onefetch'
+# Greeter: Run 'onefetch' when entering a new git repository.
 last_repository=
 check_directory_for_new_repository() {
  current_repository=$(git rev-parse --show-toplevel 2> /dev/null)
@@ -95,18 +135,20 @@ check_directory_for_new_repository() {
  fi
  last_repository=$current_repository
 }
-# 包装原始的 'cd' 命令
+# Wrap the builtin 'cd' command to trigger the check.
 cd() {
  builtin cd "$@"
  check_directory_for_new_repository
 }
-# shell 启动时也检查一次
+# Run the check once on shell startup.
 check_directory_for_new_repository
 
-# Yazi 集成: 使用 'y' 打开 yazi, 退出时自动 'cd' 到所在目录
+# Yazi integration: Open Yazi with 'y', and cd to the last directory on exit.
 function y() {
-    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+    local tmp
+    tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
     yazi "$@" --cwd-file="$tmp"
+    # shellcheck disable=SC2164
     if IFS= read -r -d '' cwd < "$tmp"; then
         if [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
             cd -- "$cwd"
@@ -116,8 +158,12 @@ function y() {
 }
 
 
-# --- 第6节：历史记录设置 (History) ---
+# --- Section 6: History Configuration ---
+# Configure Zsh's command history behavior.
 HISTFILE=~/.zsh_history
 HISTSIZE=10000
 SAVEHIST=10000
-setopt APPEND_HISTORY SHARE_HISTORY HIST_IGNORE_DUPS HIST_IGNORE_SPACE
+setopt APPEND_HISTORY       # Append to history, don't overwrite.
+setopt SHARE_HISTORY        # Share history between all open shells.
+setopt HIST_IGNORE_DUPS     # Don't record immediately repeated commands.
+setopt HIST_IGNORE_SPACE    # Don't record commands that start with a space.
