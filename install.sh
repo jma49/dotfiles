@@ -3,15 +3,12 @@
 # This script sets up a new macOS machine by installing essential tools
 # and deploying configuration files (dotfiles) managed with GNU Stow.
 
-# Exit immediately if a command exits with a non-zero status.
 set -e
 
 # --- Configuration ---
-# Your GitHub username.
-# IMPORTANT: Change this to your actual GitHub username.
 GITHUB_USERNAME="jma49"
 
-# List of applications to install via Homebrew.
+# List of command-line tools to install via Homebrew Formulae
 BREW_FORMULAE=(
   # Core Tools
   "git"
@@ -39,24 +36,21 @@ BREW_FORMULAE=(
   "glow"
   "tree"
   "fastfetch"
-  ""
 )
 
 # List of GUI Apps and Fonts to install via Homebrew Casks
 BREW_CASKS=(
   "kitty"
-  "font-fira-code" # A popular font for programming
-  "font-maple-mono-nf" # You use Maple Mono NF, which is great for icons
+  "font-fira-code"
+  "font-maple-mono-nf"
 )
 
 # --- Script ---
 
-# Define some colors for output
 COLOR_GREEN='\033[0;32m'
 COLOR_YELLOW='\033[0;33m'
 COLOR_NC='\033[0m' # No Color
 
-# Helper function for logging
 info() {
   printf "${COLOR_YELLOW}%s${COLOR_NC}\n" "$1"
 }
@@ -65,52 +59,67 @@ success() {
   printf "${COLOR_GREEN}%s${COLOR_NC}\n" "$1"
 }
 
-# --- Main Logic ---
-
 info "Starting macOS setup..."
 
-# 1. Install Homebrew (if not already installed)
+# 1. Install Homebrew
 if ! command -v brew &> /dev/null; then
   info "Homebrew not found. Installing now..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  # Add Homebrew to PATH for this script's session
   eval "$(/opt/homebrew/bin/brew shellenv)"
   success "Homebrew installed."
 else
-  info "Homebrew is already installed. Skipping."
+  info "Homebrew is already installed. Updating..."
+  brew update
 fi
 
-# 2. Install packages from the list using Homebrew
-info "Installing core packages and applications..."
-for package in "${BREW_PACKAGES[@]}"; do
-  if brew list --formula | grep -q "^${package}\$"; then
-    info "  - ${package} is already installed. Skipping."
+# 2. Install Formulae
+info "Installing formulae..."
+# FIXED: Using the correct array name 'BREW_FORMULAE'
+for formula in "${BREW_FORMULAE[@]}"; do
+  if brew list --formula | grep -q "^${formula}\$"; then
+    info "  - ${formula} is already installed. Skipping."
   else
-    info "  - Installing ${package}..."
-    brew install "${package}"
+    info "  - Installing ${formula}..."
+    brew install "${formula}"
   fi
 done
-success "All packages installed."
+success "All formulae installed."
 
-# 3. Clone dotfiles repository (if it doesn't exist)
+# 3. Install Casks
+info "Installing casks..."
+# ADDED: Loop to install casks
+for cask in "${BREW_CASKS[@]}"; do
+  if brew list --cask | grep -q "^${cask}\$"; then
+    info "  - ${cask} is already installed. Skipping."
+  else
+    info "  - Installing ${cask}..."
+    brew install --cask "${cask}"
+  fi
+done
+success "All casks installed."
+
+# 4. Clone dotfiles repository
 DOTFILES_DIR="$HOME/dotfiles"
 if [ ! -d "$DOTFILES_DIR" ]; then
   info "Cloning dotfiles repository..."
   git clone "https://github.com/${GITHUB_USERNAME}/dotfiles.git" "$DOTFILES_DIR"
-  success "Dotfiles repository cloned to ${DOTFILES_DIR}"
+  success "Dotfiles repository cloned."
 else
   info "Dotfiles directory already exists. Skipping clone."
 fi
 
-# 4. Deploy dotfiles using GNU Stow
+# 5. Deploy dotfiles using GNU Stow
 info "Deploying dotfiles with Stow..."
 cd "$DOTFILES_DIR"
-# The '*' will expand to all top-level directories (nvim, kitty, etc.)
 stow *
 success "Dotfiles have been deployed."
 
-# --- Final Message ---
 echo
 success "🚀 Setup complete!"
-info "Please restart your terminal or source your shell configuration for all changes to take effect."
+info "One last step: to make 'autojump' work, please add the following line to your '.zshrc' file:"
+echo
+# ADDED: Post-installation instruction for autojump
+info "  [ -f \"\$(brew --prefix)/etc/profile.d/autojump.sh\" ] && . \"\$(brew --prefix)/etc/profile.d/autojump.sh\""
+echo
+info "After that, restart your terminal for all changes to take effect."
 echo
