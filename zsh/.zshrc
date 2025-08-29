@@ -103,11 +103,25 @@ export SDKMAN_DIR="$HOME/.sdkman"
 
 # Navigation
 alias ..='cd ..'
+alias ...= 'cd ../..'
+alias home='cd ~'
+alias ls='lsd'                 
+alias ll='lsd -l'             
+alias la='lsd -a'              
+alias lla='lsd -la'            
+alias lt='lsd --tree'         
+alias lsd='lsd'
+
+# File create and Directions
+alias mkdir='mkdir -pv'   
+alias rm='rm -i'          
+alias cp='cp -i'            
+alias mv='mv -i'
 
 # System Tools
-alias cat='bat' # Use `bat` instead of `cat` for syntax highlighting.
-alias c++='g++-14'
-alias gcc='gcc-14'
+# alias cat='bat' # Use `bat` instead of `cat` for syntax highlighting.
+# alias c++='g++-14'
+# alias gcc='gcc-14'
 
 # Git Aliases
 alias g='git'
@@ -122,19 +136,43 @@ alias gpl='git pull'
 alias gl='git log --oneline --graph --decorate'
 alias gpristine='git reset --hard && git clean -dffx'
 
+# Net related
+alias ping='ping -c 5'   
+alias myip='curl ifconfig.me'
+
+# Other Useful Aliases
+alias c='clear'            
+alias h='history'         
+alias path='echo $PATH | tr ":" "\n"'  
+alias reload='source ~/.zshrc'
+
+# tns_fe_automation aliases
+alias ppr='pnpm pagepass run'
 
 # --- Section 5: Custom Functions ---
 # More complex custom commands.
 
-# Greeter: Run 'onefetch' when entering a new git repository.
+# Greeter: Run 'onefetch' when entering a small new git repository.
 last_repository=
+MAX_SIZE_KB=524288  # 512MB = 512 * 1024 KB
 check_directory_for_new_repository() {
- current_repository=$(git rev-parse --show-toplevel 2> /dev/null)
- if [ "$current_repository" ] && [ "$current_repository" != "$last_repository" ]; then
-  onefetch
- fi
- last_repository=$current_repository
+  # Get the top-level directory of the current git repository
+  current_repository=$(git rev-parse --show-toplevel 2> /dev/null)
+  # If inside a git repo and it's a new repo compared to the last checked
+  if [ "$current_repository" ] && [ "$current_repository" != "$last_repository" ]; then
+    # Calculate the total size of the repository directory in KB
+    repo_size_kb=$(du -s "$current_repository" | awk '{print $1}')
+    # Only run onefetch if the repo size is less than or equal to the threshold
+    if [ "$repo_size_kb" -le "$MAX_SIZE_KB" ]; then
+      onefetch
+    else
+      echo "Skipped large repository ($(($repo_size_kb / 1024)) MB): $current_repository"
+    fi
+  fi
+  # Update the last repository variable
+  last_repository=$current_repository
 }
+
 # Wrap the builtin 'cd' command to trigger the check.
 cd() {
  builtin cd "$@"
@@ -167,3 +205,44 @@ setopt APPEND_HISTORY       # Append to history, don't overwrite.
 setopt SHARE_HISTORY        # Share history between all open shells.
 setopt HIST_IGNORE_DUPS     # Don't record immediately repeated commands.
 setopt HIST_IGNORE_SPACE    # Don't record commands that start with a space.
+
+# --- Setcion 7: test env ---
+# Configure test env
+export CONSUL_HTTP_HOST=common-consul-boei18n.bytedance.net
+export CONSUL_HTTP_PORT=2280
+
+# export TEST_ENV=boei18n_prod
+# export TEST_ENV=maliva
+export _LEGO_WRAPPER_REGION="US"
+
+# DUCK_AUTH_TOKEN
+export DUCK_AUTH_TOKEN=amluY2hlbmcubWEvMjAyNS0wNy0xNSAxODoyOTo1Mg==
+
+# auto_env
+export API_TEST_VENV_ACTIVE=0
+function auto_venv() {
+  if [[ "$PWD" == *api_test* ]]; then
+    if [[ $API_TEST_VENV_ACTIVE -eq 0 ]]; then
+      if [ -f .venv/bin/activate ]; then
+        source .venv/bin/activate
+        export API_TEST_VENV_ACTIVE=1
+        echo "Already activated api_test venv."
+      fi
+    fi
+  else
+    if [[ $API_TEST_VENV_ACTIVE -eq 1 ]]; then
+      deactivate
+      export API_TEST_VENV_ACTIVE=0
+      echo "Deactivate api_test venv."
+    fi
+  fi
+}
+autoload -U add-zsh-hook
+add-zsh-hook chpwd auto_venv
+auto_venv
+
+# NVM env
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+export PATH=$HOME/.local/bin:$PATH

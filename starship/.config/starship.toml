@@ -127,7 +127,7 @@ symbol = ' '
 [directory]
 read_only = " 󰌾"
 style = "bold lavender"
-home_symbol = " 🗺️ ~"
+home_symbol = " ~"
 truncation_length = 3
 format = "[$path]($style)[$read_only]($style)"
 
