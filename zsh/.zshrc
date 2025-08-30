@@ -125,6 +125,7 @@ alias mv='mv -i'
 
 # Git Aliases
 alias g='git'
+alias gc='git clone'
 alias ga='git add'
 alias gaa='git add .'
 alias gco='git checkout'
@@ -137,7 +138,7 @@ alias gl='git log --oneline --graph --decorate'
 alias gpristine='git reset --hard && git clean -dffx'
 
 # Net related
-alias ping='ping -c 5'   
+alias ping='ping -c 10'   
 alias myip='curl ifconfig.me'
 
 # Other Useful Aliases
