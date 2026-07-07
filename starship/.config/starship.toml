@@ -1,4 +1,6 @@
 add_newline = true
+command_timeout = 20000
+scan_timeout = 50
 
 palette = "catppuccin_macchiato"
 
@@ -43,75 +45,13 @@ $python\
 $character"""
 
 right_format = """
-$singularity\
-$kubernetes\
-$vcsh\
-$fossil_branch\
-$git_branch\
-$git_commit\
-$hg_branch\
-$pijul_channel\
 $docker_context\
 $package\
-$c\
-$cpp\
-$cmake\
-$cobol\
-$daml\
-$dart\
-$deno\
-$dotnet\
-$elixir\
-$elm\
-$erlang\
-$fennel\
-$golang\
-$guix_shell\
-$haskell\
-$haxe\
-$helm\
-$java\
-$julia\
-$kotlin\
-$gradle\
-$lua\
-$nim\
 $nodejs\
-$ocaml\
-$opa\
-$perl\
-$php\
-$pulumi\
-$purescript\
-$python\
-$raku\
-$rlang\
-$red\
-$ruby\
-$rust\
-$scala\
-$solidity\
-$swift\
-$terraform\
-$vlang\
-$vagrant\
-$zig\
-$buf\
-$conda\
-$pixi\
-$meson\
-$spack\
-$memory_usage\
-$aws\
-$gcloud\
-$openstack\
-$azure\
-$crystal\
+$golang\
+$java\
 $cmd_duration\
-$custom\
 $status\
-$os\
-$battery\
 $time"""
 
 [fill]
@@ -132,7 +72,7 @@ truncation_length = 3
 format = "[$path]($style)[$read_only]($style)"
 
 [character]
-success_symbol = "[[󰄛](green) ❯](peach)"
+success_symbol = "[[](green) ❯](peach)"
 error_symbol = "[❯](red)"
 vimcmd_symbol = "[❮](green)"
 

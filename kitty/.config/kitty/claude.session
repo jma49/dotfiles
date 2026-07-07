@@ -1,0 +1,6 @@
+new_tab workspace
+layout splits
+
+launch zsh -lc "nvim ."
+launch --location=vsplit zsh -lc "ttadk code -t claude"
+launch --location=hsplit zsh
