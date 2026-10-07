@@ -36,6 +36,7 @@ brew "shellcheck"  # Static analysis for shell scripts (CI lint)
 brew "stylua"  # Lua formatter (CI lint, nvim config)
 brew "taplo"  # TOML formatter and linter (CI lint)
 brew "gitleaks"  # Secret scanner (CI; run `gitleaks git` before pushing)
+brew "mas"  # Mac App Store CLI, installs the mas entries below
 
 # --- Languages and runtimes ---
 brew "node"  # Open-source, cross-platform JavaScript runtime environment
@@ -82,6 +83,8 @@ cask "zed"  # Multiplayer code editor
 cask "cursor"  # Write, edit, and chat about your code with AI
 cask "codex"  # OpenAI's coding agent that runs in your terminal
 cask "sublime-text"  # Text editor for code, markup and prose
+cask "visual-studio-code"  # Open-source code editor
+cask "typora"  # Configurable document editor that supports Markdown
 
 # --- Development ---
 cask "orbstack"  # Replacement for Docker Desktop
@@ -92,6 +95,13 @@ cask "android-platform-tools"  # Android SDK component
 cask "mitmproxy"  # Intercept, modify, replay, save HTTP/S traffic
 cask "miniconda"  # Minimal installer for conda
 cask "macfuse"  # File system integration
+cask "postman"  # Collaboration platform for API development
+
+# --- Browsers and AI apps ---
+cask "google-chrome"  # Web browser
+cask "firefox"  # Web browser
+cask "chatgpt"  # OpenAI's official ChatGPT desktop app
+cask "claude"  # Anthropic's official Claude AI desktop app
 
 # --- Productivity and notes ---
 cask "obsidian"  # Knowledge base that works on top of a local folder of plain text Markdown files
@@ -102,6 +112,16 @@ cask "reminders-menubar"  # Simple menu bar app to view and interact with remind
 cask "thaw"  # Menu bar manager
 cask "only-switch"  # System and utility switches
 cask "squirrel-app"  # Rime input method engine
+cask "raycast"  # Control your tools with a few keystrokes
+cask "notion"  # App to write, plan, collaborate, and get organised
+cask "muse"  # AI assistant for managing tasks, projects, and long-term goals
+cask "open-design"  # Local-first, agent-native design tool
+cask "keka"  # File archiver
+cask "mos"  # Smooths scrolling and set mouse scroll directions independently
+cask "libreoffice"  # Free cross-platform office suite, fresh version
+cask "folx"  # Download manager with a torrent client
+cask "tencent-lemon"  # Cleanup and system status tool
+cask "papercut-mobility-print-client"  # Client for printing to PaperCut Mobility Print queues
 
 # --- Communication and media ---
 cask "slack"  # Team communication and collaboration software
@@ -109,6 +129,14 @@ cask "discord"  # Voice and text chat software
 cask "obs"  # Open-source software for live streaming and screen recording
 cask "kap"  # Open-source screen recorder built with web technology
 cask "veracrypt"  # Disk encryption software focusing on security based on TrueCrypt
+cask "telegram"  # Messaging app with a focus on speed and security
+cask "wechat"  # Free messaging and calling application
+cask "whatsapp"  # Native desktop client for WhatsApp
+cask "lark"  # Lark (Feishu) workspace: chat, docs and meetings
+cask "voov-meeting"  # Video conferencing software
+cask "iina"  # Free and open-source media player
+cask "neteasemusic"  # Music streaming platform
+cask "imaging-edge"  # Sony RAW development and tethered shooting
 
 # --- Fonts (Maple Mono NF CN is the terminal and editor font) ---
 cask "font-maple-mono-nf-cn"
@@ -120,6 +148,15 @@ cask "font-maple-mono-normal-cn"
 cask "font-maple-mono-normal-nf"
 cask "font-maple-mono-normal-nf-cn"
 cask "font-fira-code"
+
+# --- Mac App Store (needs an App Store sign-in; ids from `mas list`) ---
+mas "Xcode", id: 497799835
+mas "Xnip", id: 1221250572
+mas "Numbers", id: 409203825
+mas "Pages", id: 409201541
+mas "Microsoft Outlook", id: 985367838
+mas "Microsoft OneNote", id: 784801555
+mas "Pixea", id: 1507782672
 
 # --- VS Code extensions (VS Code stays installed alongside Zed) ---
 vscode "adpyke.codesnap"

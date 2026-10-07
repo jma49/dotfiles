@@ -52,6 +52,17 @@ else
   info "Some packages failed to install; continuing. Rerun 'brew bundle' later."
 fi
 
+# Tools installed by their own installers into ~/.local/bin, like on the current Mac
+export PATH="$HOME/.local/bin:$PATH"
+if ! command -v uv &> /dev/null; then
+  info "Installing uv..."
+  curl -LsSf https://astral.sh/uv/install.sh | sh || info "uv install failed; rerun later."
+fi
+if ! command -v herdr &> /dev/null; then
+  info "Installing herdr..."
+  curl -fsSL https://herdr.dev/install.sh | sh || info "herdr install failed; rerun later."
+fi
+
 # Python CLI tools outside Homebrew: latex2text renders LaTeX in nvim's render-markdown
 if command -v uv &> /dev/null; then
   uv tool install pylatexenc || true
@@ -83,6 +94,8 @@ if command -v claude &> /dev/null; then
   info "Installing Claude Code plugins..."
   claude plugin marketplace add "$HOME/.claude/dotfiles-plugins" || true
   claude plugin install agent-status@dotfiles || true
+  # herdr's hook reports Claude Code session state to herdr's agent panel
+  command -v herdr &> /dev/null && { herdr integration install claude || true; }
 else
   info "claude not found. Skipping Claude Code plugins."
 fi
@@ -91,4 +104,5 @@ fi
 echo
 success "🚀 Setup complete!"
 info "Please restart your terminal for all changes to take full effect."
+info "Then work through the manual steps in README.md (SSH keys, gh auth, secrets, sign-ins)."
 echo

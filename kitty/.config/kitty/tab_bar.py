@@ -27,7 +27,12 @@ STATE_DIR = os.path.expanduser("~/.cache/claude-agents")
 RESCAN_EVERY = 5  # seconds; reread even when the directory is unchanged, dropping exited sessions
 LONG_TURN = 30  # seconds
 SOUND_GAP = 2  # seconds; sessions finishing together play one sound
-HERDR = os.path.expanduser("~/.local/bin/herdr")
+# herdr's own installer uses ~/.local/bin, Homebrew /opt/homebrew/bin; kitty's PATH
+# (launched from the Dock) has neither, so look in both
+HERDR = next(
+    (p for p in (os.path.expanduser("~/.local/bin/herdr"), "/opt/homebrew/bin/herdr") if os.path.exists(p)),
+    "herdr",
+)
 
 ORDER = ("blocked", "failed", "working", "done")
 SYMBOLS = {"blocked": "✻", "failed": "✗", "working": "✽", "done": "✓"}
