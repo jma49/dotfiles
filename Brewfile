@@ -78,15 +78,12 @@ brew "yazi"  # Blazing fast terminal file manager written in Rust, based on asyn
 # --- Terminal and editors ---
 cask "kitty"  # GPU-based terminal emulator
 cask "zed"  # Multiplayer code editor
-cask "cursor"  # Write, edit, and chat about your code with AI
 cask "codex"  # OpenAI's coding agent that runs in your terminal
 cask "typora"  # Configurable document editor that supports Markdown
 
 # --- Development ---
 cask "orbstack"  # Replacement for Docker Desktop
 cask "gcloud-cli"  # Set of tools to manage resources and applications hosted on Google Cloud
-cask "android-studio"  # Tools for building Android applications
-cask "android-platform-tools"  # Android SDK component
 cask "mitmproxy"  # Intercept, modify, replay, save HTTP/S traffic
 cask "macfuse"  # File system integration
 cask "postman"  # Collaboration platform for API development
@@ -109,7 +106,6 @@ cask "squirrel-app"  # Rime input method engine
 cask "raycast"  # Control your tools with a few keystrokes
 cask "notion"  # App to write, plan, collaborate, and get organised
 cask "muse"  # AI assistant for managing tasks, projects, and long-term goals
-cask "open-design"  # Local-first, agent-native design tool
 cask "keka"  # File archiver
 cask "mos"  # Smooths scrolling and set mouse scroll directions independently
 cask "libreoffice"  # Free cross-platform office suite, fresh version
@@ -140,7 +136,6 @@ mas "Pixea", id: 1507782672
 
 # --- Global npm CLIs ---
 npm "@anthropic-ai/claude-code"
-npm "@earendil-works/pi-coding-agent"
 npm "ccstatusline"
 npm "neon"
 npm "pyright"
