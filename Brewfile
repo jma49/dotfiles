@@ -116,7 +116,6 @@ cask "libreoffice"  # Free cross-platform office suite, fresh version
 cask "folx"  # Download manager with a torrent client
 
 # --- Communication and media ---
-cask "slack"  # Team communication and collaboration software
 cask "discord"  # Voice and text chat software
 cask "obs"  # Open-source software for live streaming and screen recording
 cask "kap"  # Open-source screen recorder built with web technology
@@ -126,17 +125,10 @@ cask "wechat"  # Free messaging and calling application
 cask "whatsapp"  # Native desktop client for WhatsApp
 cask "voov-meeting"  # Video conferencing software
 cask "iina"  # Free and open-source media player
-cask "neteasemusic"  # Music streaming platform
 
-# --- Fonts: Maple Mono (NF CN is the terminal and editor font) ---
+# --- Fonts: Maple Mono NF (terminals) and NF CN (Zed editor, CJK in kitty) ---
 cask "font-maple-mono-nf-cn"
 cask "font-maple-mono-nf"
-cask "font-maple-mono"
-cask "font-maple-mono-cn"
-cask "font-maple-mono-normal"
-cask "font-maple-mono-normal-cn"
-cask "font-maple-mono-normal-nf"
-cask "font-maple-mono-normal-nf-cn"
 
 # --- Mac App Store (needs an App Store sign-in; ids from `mas list`) ---
 mas "Xcode", id: 497799835
@@ -150,8 +142,6 @@ mas "Pixea", id: 1507782672
 # --- Global npm CLIs ---
 npm "@anthropic-ai/claude-code"
 npm "@earendil-works/pi-coding-agent"
-npm "@google/gemini-cli"
 npm "ccstatusline"
-npm "clerk"
 npm "neon"
 npm "pyright"
