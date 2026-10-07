@@ -123,7 +123,6 @@ cask "veracrypt"  # Disk encryption software focusing on security based on TrueC
 cask "telegram"  # Messaging app with a focus on speed and security
 cask "wechat"  # Free messaging and calling application
 cask "whatsapp"  # Native desktop client for WhatsApp
-cask "voov-meeting"  # Video conferencing software
 cask "iina"  # Free and open-source media player
 
 # --- Fonts: Maple Mono NF (terminals) and NF CN (Zed editor, CJK in kitty) ---
