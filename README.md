@@ -21,7 +21,7 @@
 > [!IMPORTANT]
 > This is more than terminal dotfiles. It is the setup I bring to every new Mac: shell and editor
 > configs, the full app list in the [`Brewfile`](Brewfile) (CLI tools, apps, fonts, Mac App Store
-> apps, global npm CLIs), and a checklist for what is deliberately kept out of git: keys, secrets and sign-ins.
+> apps, global npm CLIs), and a short checklist for the few manual steps.
 > Clone it, run one script, and the machine feels like mine. Feel free to borrow anything.
 
 ## Highlights
@@ -78,7 +78,7 @@ becomes `~/.config/kitty/kitty.conf`. Edit files in the repo; the links pick cha
 
 ### After the script
 
-Keys, secrets and sign-ins are deliberately kept out of this repo, and a few steps need a human at the keyboard:
+A few steps the script can't do for you:
 
 - [ ] **SSH keys**: copy `~/.ssh` from the old Mac, or create a key and add it to GitHub
 - [ ] **GitHub CLI**: `gh auth login`
