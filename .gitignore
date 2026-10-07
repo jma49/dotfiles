@@ -1,2 +1,4 @@
 .DS_Store
 __pycache__/
+# macOS custom folder icons (the name ends in a carriage return)
+Icon
