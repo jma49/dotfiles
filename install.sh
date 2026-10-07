@@ -190,5 +190,5 @@ fi
 
 echo
 success "Setup complete. Run ./install.sh --check any time to see what's left."
-info "Restart the terminal, then work through 'After the script' in README.md (SSH keys, gh auth, secrets, sign-ins)."
+info "Restart the terminal to pick everything up."
 echo
