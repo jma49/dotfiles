@@ -1,0 +1,46 @@
+// Zed keymap: VS Code base keymap, plus kitty-style tab/pane bindings
+// (mirrors ~/dotfiles/kitty/.config/kitty/kitty.conf)
+[
+  {
+    "context": "Editor",
+    "bindings": {
+      // Jump between diff hunks
+      "alt-]": "editor::GoToHunk",
+      "alt-[": "editor::GoToPreviousHunk"
+    }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      // Open the project-wide diff (all changed files in one view)
+      "cmd-alt-d": "git::Diff",
+      // kitty: cmd+1..9 goes to tab N (VS Code default focuses pane N)
+      "cmd-1": ["pane::ActivateItem", 0],
+      "cmd-2": ["pane::ActivateItem", 1],
+      "cmd-3": ["pane::ActivateItem", 2],
+      "cmd-4": ["pane::ActivateItem", 3],
+      "cmd-5": ["pane::ActivateItem", 4],
+      "cmd-6": ["pane::ActivateItem", 5],
+      "cmd-7": ["pane::ActivateItem", 6],
+      "cmd-8": ["pane::ActivateItem", 7],
+      "cmd-9": ["pane::ActivateItem", 8],
+      // kitty: cmd+shift+a opens Claude
+      "cmd-shift-a": "agent::ToggleFocus"
+    }
+  },
+  {
+    // kitty window/split bindings, scoped to the terminal so editor keys
+    // (cmd-shift-k delete line, cmd-shift-l select all matches, ...) keep working
+    "context": "Terminal",
+    "bindings": {
+      "cmd-t": "workspace::NewTerminal",
+      "cmd-shift-d": "pane::SplitDown",
+      "cmd-shift-h": "workspace::ActivatePaneLeft",
+      "cmd-shift-j": "workspace::ActivatePaneDown",
+      "cmd-shift-k": "workspace::ActivatePaneUp",
+      "cmd-shift-l": "workspace::ActivatePaneRight",
+      "cmd-alt-w": "pane::CloseActiveItem",
+      "cmd-shift-m": "workspace::ToggleZoom"
+    }
+  }
+]

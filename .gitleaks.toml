@@ -1,0 +1,9 @@
+# gitleaks: the default rules, plus keys for services used here that it lacks
+[extend]
+useDefault = true
+
+[[rules]]
+id = "tavily-api-key"
+description = "Tavily API key"
+regex = '''\btvly-(?:dev-|prod-)?[A-Za-z0-9_-]{20,}'''
+keywords = ["tvly-"]

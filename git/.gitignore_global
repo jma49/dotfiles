@@ -1,0 +1,22 @@
+*~
+.DS_Store
+
+**/.claude/settings.local.json
+**/.claude/worktrees/
+
+# --- Dependencies and build output ---
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.pyc
+target/
+build/
+dist/
+.gradle/
+
+# --- Environment and secrets ---
+.env
+.env.local
+*.pem
+*.key

@@ -1,0 +1,8 @@
+{
+  "name": "agent-status",
+  "version": "1.0.0",
+  "description": "Record each Claude Code session's state for the kitty tab bar",
+  "author": {
+    "name": "jincheng_m"
+  }
+}

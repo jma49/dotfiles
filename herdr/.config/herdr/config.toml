@@ -1,0 +1,21 @@
+onboarding = false
+
+# Over kitty's darker glass (Mocha crust) the default overlay0 pane borders fade;
+# brighten them, and use lavender for the focused pane like kitty and Zed
+[theme.custom]
+overlay0 = "#9399b2"
+surface_dim = "#585b70"
+accent = "#b4befe"
+# Panels, menus and the copied-to-clipboard toast use the terminal background,
+# so they sit on kitty's glass instead of showing as solid dark boxes
+panel_bg = "reset"
+
+# prefix+y: lazygit in a popup over the current pane's directory (like craftzdog's
+# tmux popup), without changing the layout
+[[keys.command]]
+key = "prefix+y"
+type = "popup"
+command = 'cd "$(herdr pane get "$HERDR_ACTIVE_PANE_ID" | jq -r .result.pane.foreground_cwd)" && lazygit'
+description = "lazygit"
+width = "85%"
+height = "85%"

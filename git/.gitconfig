@@ -1,0 +1,30 @@
+[user]
+	name = jincheng_m
+	email = majincheng990128@gmail.com
+
+[core]
+	autocrlf = input
+	excludesfile = ~/.gitignore_global
+	pager = delta
+
+[credential]
+	helper = osxkeychain
+
+[interactive]
+	diffFilter = delta --color-only
+
+[include]
+	path = ~/.config/delta/catppuccin.gitconfig
+
+[delta]
+	features = catppuccin-mocha
+	navigate = true
+	line-numbers = true
+	side-by-side = true
+	# Blue boxed file and hunk headers stand out on the dark glass (catppuccin uses overlay0)
+	file-style = bold "#cdd6f4"
+	file-decoration-style = "#89b4fa" ul
+	hunk-header-decoration-style = "#89b4fa" box ul
+
+[merge]
+	conflictStyle = zdiff3

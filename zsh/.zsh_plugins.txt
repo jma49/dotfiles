@@ -1,0 +1,9 @@
+# Completion definitions only go on fpath; .zshrc runs compinit after this file
+zsh-users/zsh-completions kind:fpath path:src
+zsh-users/zsh-autosuggestions
+
+# Selected Oh My Zsh plugins
+ohmyzsh/ohmyzsh path:plugins/web-search
+
+# Must load last (upstream requirement) to highlight commands defined above
+zsh-users/zsh-syntax-highlighting

@@ -1,0 +1,16 @@
+{
+  "name": "dotfiles",
+  "owner": {
+    "name": "jincheng_m"
+  },
+  "plugins": [
+    {
+      "name": "agent-status",
+      "source": "./agent-status",
+      "description": "Record each Claude Code session's state for the kitty tab bar"
+    }
+  ],
+  "metadata": {
+    "description": "Personal Claude Code plugins from dotfiles"
+  }
+}

@@ -1,0 +1,63 @@
+name: lint
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    env:
+      # Same versions as the Brewfile installs locally, so formatting agrees
+      STYLUA_VERSION: v2.5.2
+      TAPLO_VERSION: 0.10.0
+      GITLEAKS_VERSION: 8.30.1
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # gitleaks scans the whole history
+
+      - name: Install zsh, stow, formatters and gitleaks
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq zsh stow
+          mkdir -p "$HOME/.local/bin"
+          curl -fsSL "https://github.com/JohnnyMorganz/StyLua/releases/download/${STYLUA_VERSION}/stylua-linux-x86_64.zip" -o stylua.zip
+          unzip -q stylua.zip -d "$HOME/.local/bin"
+          curl -fsSL "https://github.com/tamasfe/taplo/releases/download/${TAPLO_VERSION}/taplo-linux-x86_64.gz" | gunzip > "$HOME/.local/bin/taplo"
+          curl -fsSL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" | tar -xz -C "$HOME/.local/bin" gitleaks
+          chmod +x "$HOME/.local/bin/stylua" "$HOME/.local/bin/taplo"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Secrets (gitleaks, full history)
+        run: gitleaks git --redact --config .gitleaks.toml .
+
+      - name: Shell scripts (shellcheck)
+        run: shellcheck install.sh $(git ls-files '*.sh')
+
+      - name: zsh syntax
+        run: zsh -n zsh/.zshrc
+
+      - name: Lua formatting (stylua)
+        run: stylua --check --config-path nvim/.config/nvim/.stylua.toml nvim/.config/nvim
+
+      - name: TOML formatting (taplo)
+        run: taplo fmt --check $(git ls-files '*.toml' | grep -v '/flavors/')
+
+      - name: Python syntax (kitty tab bar, Zed theme generator)
+        run: python3 -m py_compile kitty/.config/kitty/tab_bar.py zed/build-catppuccin-blur-2.py
+
+      - name: Zed theme matches its generator
+        run: python3 zed/build-catppuccin-blur-2.py --check
+
+      - name: Every package stows cleanly into an empty home
+        run: |
+          home="$(mktemp -d)"
+          mkdir -p "$home/.config"
+          for package in */; do
+            stow --no --verbose=1 --target "$home" --restow "${package%/}"
+          done

@@ -1,0 +1,13 @@
+# Only overrides live here — Yazi merges them on top of its built-in defaults,
+# so this file stays valid across upgrades.
+
+[mgr]
+ratio = [2, 3, 4]
+
+[[plugin.prepend_previewers]]
+url = "*.md"
+run = 'piper -- CLICOLOR_FORCE=1 glow -w=$w -s=dark "$1"'
+
+[[plugin.prepend_previewers]]
+mime = "text/markdown"
+run = 'piper -- CLICOLOR_FORCE=1 glow -w=$w -s=dark "$1"'
