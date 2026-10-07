@@ -31,7 +31,6 @@ brew "onefetch"  # Command-line Git information tool
 # --- Editors and linters ---
 brew "neovim"  # Ambitious Vim-fork focused on extensibility and agility
 brew "tree-sitter-cli"  # Parser generator tool
-brew "luajit-openresty"  # OpenResty's Branch of LuaJIT 2
 brew "shellcheck"  # Static analysis for shell scripts (CI lint)
 brew "stylua"  # Lua formatter (CI lint, nvim config)
 brew "taplo"  # TOML formatter and linter (CI lint)
@@ -40,7 +39,6 @@ brew "mas"  # Mac App Store CLI, installs the mas entries below
 
 # --- Languages and runtimes ---
 brew "node"  # Open-source, cross-platform JavaScript runtime environment
-brew "nvm"  # Manage multiple Node.js versions
 brew "go"  # Open source programming language to build simple/reliable/efficient software
 brew "gcc"  # GNU compiler collection
 brew "pkgconf"  # Package compiler and linker metadata toolkit
@@ -82,18 +80,14 @@ cask "kitty"  # GPU-based terminal emulator
 cask "zed"  # Multiplayer code editor
 cask "cursor"  # Write, edit, and chat about your code with AI
 cask "codex"  # OpenAI's coding agent that runs in your terminal
-cask "sublime-text"  # Text editor for code, markup and prose
-cask "visual-studio-code"  # Open-source code editor
 cask "typora"  # Configurable document editor that supports Markdown
 
 # --- Development ---
 cask "orbstack"  # Replacement for Docker Desktop
-cask "vagrant"  # Development environment
 cask "gcloud-cli"  # Set of tools to manage resources and applications hosted on Google Cloud
 cask "android-studio"  # Tools for building Android applications
 cask "android-platform-tools"  # Android SDK component
 cask "mitmproxy"  # Intercept, modify, replay, save HTTP/S traffic
-cask "miniconda"  # Minimal installer for conda
 cask "macfuse"  # File system integration
 cask "postman"  # Collaboration platform for API development
 
@@ -120,8 +114,6 @@ cask "keka"  # File archiver
 cask "mos"  # Smooths scrolling and set mouse scroll directions independently
 cask "libreoffice"  # Free cross-platform office suite, fresh version
 cask "folx"  # Download manager with a torrent client
-cask "tencent-lemon"  # Cleanup and system status tool
-cask "papercut-mobility-print-client"  # Client for printing to PaperCut Mobility Print queues
 
 # --- Communication and media ---
 cask "slack"  # Team communication and collaboration software
@@ -132,13 +124,11 @@ cask "veracrypt"  # Disk encryption software focusing on security based on TrueC
 cask "telegram"  # Messaging app with a focus on speed and security
 cask "wechat"  # Free messaging and calling application
 cask "whatsapp"  # Native desktop client for WhatsApp
-cask "lark"  # Lark (Feishu) workspace: chat, docs and meetings
 cask "voov-meeting"  # Video conferencing software
 cask "iina"  # Free and open-source media player
 cask "neteasemusic"  # Music streaming platform
-cask "imaging-edge"  # Sony RAW development and tethered shooting
 
-# --- Fonts (Maple Mono NF CN is the terminal and editor font) ---
+# --- Fonts: Maple Mono (NF CN is the terminal and editor font) ---
 cask "font-maple-mono-nf-cn"
 cask "font-maple-mono-nf"
 cask "font-maple-mono"
@@ -147,7 +137,6 @@ cask "font-maple-mono-normal"
 cask "font-maple-mono-normal-cn"
 cask "font-maple-mono-normal-nf"
 cask "font-maple-mono-normal-nf-cn"
-cask "font-fira-code"
 
 # --- Mac App Store (needs an App Store sign-in; ids from `mas list`) ---
 mas "Xcode", id: 497799835
@@ -157,33 +146,6 @@ mas "Pages", id: 409201541
 mas "Microsoft Outlook", id: 985367838
 mas "Microsoft OneNote", id: 784801555
 mas "Pixea", id: 1507782672
-
-# --- VS Code extensions (VS Code stays installed alongside Zed) ---
-vscode "adpyke.codesnap"
-vscode "cardinal90.multi-cursor-case-preserve"
-vscode "catppuccin.catppuccin-vsc"
-vscode "dbaeumer.vscode-eslint"
-vscode "docker.docker"
-vscode "dotjoshjohnson.xml"
-vscode "eamodio.gitlens"
-vscode "esbenp.prettier-vscode"
-vscode "foxundermoon.shell-format"
-vscode "jock.svg"
-vscode "mechatroner.rainbow-csv"
-vscode "ms-python.debugpy"
-vscode "ms-python.python"
-vscode "ms-python.vscode-pylance"
-vscode "ms-toolsai.jupyter"
-vscode "ms-toolsai.jupyter-renderers"
-vscode "ms-vscode-remote.remote-containers"
-vscode "oderwat.indent-rainbow"
-vscode "pkief.material-icon-theme"
-vscode "redhat.vscode-yaml"
-vscode "rodrigovallades.es7-react-js-snippets"
-vscode "streetsidesoftware.code-spell-checker"
-vscode "sumneko.lua"
-vscode "tomoki1207.pdf"
-vscode "usernamehw.errorlens"
 
 # --- Global npm CLIs ---
 npm "@anthropic-ai/claude-code"
