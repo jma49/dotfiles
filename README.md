@@ -1,9 +1,8 @@
 <h1 align="center">dotfiles</h1>
 
 <p align="center">
-  My whole Mac, as code: the terminal and editors I live in, the apps I install,<br>
-  and the steps to rebuild it all on a new machine. Catppuccin Mocha on frosted glass,<br>
-  built around running many Claude Code agents side by side.
+  A complete macOS setup in one repo: terminal, editors, shell and apps,<br>
+  in Catppuccin Mocha on frosted glass, built around running many Claude Code agents side by side.
 </p>
 
 <p align="center">
@@ -18,15 +17,16 @@
   <img src=".github/screenshots/terminal.png" alt="kitty with herdr: Claude Code beside Neovim, the custom tab bar on top" width="100%">
 </p>
 
-> [!IMPORTANT]
-> This is more than terminal dotfiles. It is the setup I bring to every new Mac: shell and editor
-> configs, the full app list in the [`Brewfile`](Brewfile) (CLI tools, apps, fonts, Mac App Store
-> apps, global npm CLIs), and a short checklist for the few manual steps.
-> Clone it, run one script, and the machine feels like mine. Feel free to borrow anything.
+Not just terminal dotfiles: alongside the configs, the [`Brewfile`](Brewfile) lists every CLI tool,
+app, font and Mac App Store app, so one script turns a fresh Mac into this setup.
+
+> [!WARNING]
+> These are my personal settings. Read the code and remove what you don't want before running
+> `install.sh`, or fork the repo and make it yours. Borrowing single files works just as well.
 
 ## Highlights
 
-- **A new Mac in one command.** `install.sh` installs Homebrew and everything I use, links every config, and sets up the agent tooling; a short checklist covers keys and sign-ins.
+- **A new Mac in one command.** `install.sh` checks the machine first, then installs Homebrew and every package, links every config and sets up the agent tooling, skipping whatever is already done.
 - **Built for parallel agents.** kitty hosts [herdr](https://herdr.dev), which keeps Claude Code sessions alive when kitty restarts; kitty's tab bar shows how many need you, are running or have finished, and plays a sound when one needs attention in a pane you aren't watching.
 - **One look everywhere.** kitty, herdr, Zed, Neovim, starship, delta, bat, lsd, yazi and fzf share Catppuccin Mocha and the same glass, with dim text lifted so it stays readable over any wallpaper.
 - **A theme with receipts.** Zed's *Catppuccin Blur 2.0* is generated from the official palette, with every text color checked for contrast against the glass over both a dark and a bright wallpaper.
@@ -35,7 +35,7 @@
 ## Contents
 
 - [Gallery](#gallery)
-- [New Mac](#new-mac)
+- [Install](#install)
 - [Toolbox](#toolbox)
 - [What's inside](#whats-inside)
 - [Look](#look)
@@ -50,7 +50,7 @@
 | :---: | :---: |
 | <img src=".github/screenshots/zed.png" alt="Zed with Catppuccin Blur 2.0, the project panel and a Claude Code thread"> | <img src=".github/screenshots/nvim.png" alt="Neovim (AstroNvim) with lazy.nvim open on the glass"> |
 
-## New Mac
+## Install
 
 > [!NOTE]
 > Written for Apple Silicon Macs (Homebrew in `/opt/homebrew`). Sign in to the App Store first so
@@ -75,20 +75,6 @@ Run `./install.sh --check` to see that report without changing anything.
 
 Each top-level directory is a Stow package mirroring `$HOME`, so `kitty/.config/kitty/kitty.conf`
 becomes `~/.config/kitty/kitty.conf`. Edit files in the repo; the links pick changes up.
-
-### After the script
-
-A few steps the script can't do for you:
-
-- [ ] **SSH keys**: copy `~/.ssh` from the old Mac, or create a key and add it to GitHub
-- [ ] **GitHub CLI**: `gh auth login`
-- [ ] **Secrets**: copy `~/.local_secrets` (API keys and work settings; `.zshrc` sources it, git never sees it)
-- [ ] **Claude Code**: run `claude` and sign in; copy `~/.claude` if you want settings and memory back
-- [ ] **Permissions**: Screen Recording for Xnip; Accessibility for Raycast and Mos
-- [ ] **Shortcuts**: turn off macOS's own screenshot shortcuts (Xnip takes over) and give `cmd+space` to Raycast
-- [ ] **First launches**: open Neovim once (plugins, parsers and LSPs install), and Zed (extensions install)
-- [ ] **Java** (if needed): install SDKMAN, then `sdk install java`
-- [ ] **App data**: import Raycast settings, reopen Obsidian vaults
 
 ## Toolbox
 
