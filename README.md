@@ -61,13 +61,17 @@ git clone https://github.com/jma49/dotfiles.git ~/dotfiles
 cd ~/dotfiles && ./install.sh
 ```
 
-`install.sh` is safe to rerun. It:
+`install.sh` starts with a preflight: it stops early unless this is an Apple Silicon Mac with the
+Xcode Command Line Tools and a network connection, then reports which steps are already done.
+It only does what is missing, so reruns are cheap and change nothing that is in place:
 
-1. installs Homebrew if needed and everything in the [`Brewfile`](Brewfile): CLI tools, apps, fonts, Mac App Store apps and global npm CLIs,
+1. installs Homebrew if needed, then whatever the [`Brewfile`](Brewfile) lists that isn't installed: CLI tools, apps, fonts, Mac App Store apps and global npm CLIs (it never upgrades, and skips apps already in `/Applications`),
 2. installs uv and herdr with their own installers, then `latex2text` with uv for Neovim's Markdown rendering,
 3. moves any existing dotfile it would replace into `~/.dotfiles-backup/<timestamp>/`,
-4. links every package into `$HOME` with GNU Stow,
+4. links every package that isn't linked yet into `$HOME` with GNU Stow,
 5. installs the Claude Code plugin described [below](#claude-code-integration) and herdr's Claude Code integration.
+
+Run `./install.sh --check` to see that report without changing anything.
 
 Each top-level directory is a Stow package mirroring `$HOME`, so `kitty/.config/kitty/kitty.conf`
 becomes `~/.config/kitty/kitty.conf`. Edit files in the repo; the links pick changes up.
@@ -88,7 +92,7 @@ Some things don't belong in a public repo, or need a human at the keyboard:
 
 ## Toolbox
 
-The tools I install first on any Mac, and why. Everything below comes with the [`Brewfile`](Brewfile).
+The tools I install first on any Mac, and why. `install.sh` installs all of them: the [`Brewfile`](Brewfile), plus herdr and uv through their own installers.
 
 ### 🖥️ Terminal and agents
 
