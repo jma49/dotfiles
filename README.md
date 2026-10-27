@@ -30,7 +30,7 @@ app, font and Mac App Store app, so one script turns a fresh Mac into this setup
 - **Built for parallel agents.** kitty hosts [herdr](https://herdr.dev), which keeps Claude Code sessions alive when kitty restarts; kitty's tab bar shows how many need you, are running or have finished, and plays a sound when one needs attention in a pane you aren't watching.
 - **One look everywhere.** kitty, herdr, Zed, Neovim, starship, delta, bat, lsd, yazi and fzf share Catppuccin Mocha and the same glass, with dim text lifted so it stays readable over any wallpaper.
 - **A theme with receipts.** Zed's *Catppuccin Blur 2.0* is generated from the official palette, with every text color checked for contrast against the glass over both a dark and a bright wallpaper.
-- **Checked on every push.** CI lints shell, zsh, Lua, TOML and Python, scans the full history for secrets, verifies the generated theme and stows every package into an empty home.
+- **Checked on every push.** CI lints shell, zsh, Lua, TOML, JSON and Python, scans the full history for secrets, verifies the generated theme, stows every package into an empty home and checks the Brewfile on macOS.
 
 ## Contents
 
@@ -86,6 +86,8 @@ The tools I install first on any Mac, and why. `install.sh` installs all of them
 <tr><td><a href="https://sw.kovidgoyal.net/kitty/"><img src="https://img.shields.io/badge/kitty-cba6f7?style=for-the-badge" alt="kitty"></a></td><td>GPU-fast terminal whose tab bar is a Python file and whose panes take remote commands. The base of everything here.</td></tr>
 <tr><td><a href="https://herdr.dev"><img src="https://img.shields.io/badge/herdr-b4befe?style=for-the-badge" alt="herdr"></a></td><td>tmux for coding agents: persistent workspaces, an agent panel that knows who is working or waiting, popups.</td></tr>
 <tr><td><a href="https://claude.com/claude-code"><img src="https://img.shields.io/badge/Claude_Code-fab387?style=for-the-badge&logo=claude&logoColor=11111b" alt="Claude Code"></a></td><td>The agent the whole setup is built around; a dozen sessions run side by side in herdr.</td></tr>
+<tr><td><a href="https://t3.codes"><img src="https://img.shields.io/badge/T3_Code-89b4fa?style=for-the-badge" alt="T3 Code"></a></td><td>Minimal GUI for coding agents: projects, threads and diffs in one window; nightly channel.</td></tr>
+<tr><td><a href="https://usemagpie.ai"><img src="https://img.shields.io/badge/magpie-cba6f7?style=for-the-badge" alt="magpie"></a></td><td>One gateway for every agent's models and subscriptions; its own config, keys and accounts sync with <code>magpie github</code>.</td></tr>
 <tr><td><a href="https://starship.rs"><img src="https://img.shields.io/badge/starship-f5c2e7?style=for-the-badge&logo=starship&logoColor=11111b" alt="starship"></a></td><td>Fast, configurable prompt. Here: a Tide-style path and git segment in Mocha.</td></tr>
 </table>
 
@@ -261,9 +263,11 @@ Restart running sessions (or run `/reload-plugins`) to pick it up, and restart k
 | zsh syntax | `zsh -n` |
 | Lua formatting | stylua |
 | TOML formatting | taplo |
+| JSON parses | `jq empty` |
 | Python syntax | `py_compile` |
 | Zed theme matches its generator | `build-catppuccin-blur-2.py --check` |
 | Every package stows into an empty home | GNU Stow |
+| Brewfile parses and every package exists (macOS) | Homebrew |
 
 The same tools come from the `Brewfile`, so they run locally too; run `gitleaks git` before pushing.
 
