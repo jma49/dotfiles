@@ -49,7 +49,7 @@ brew "poetry"  # Python package management tool
 brew "rustup"  # Rust toolchain installer
 
 # --- Cloud, databases and APIs ---
-brew "vercel"  # Command-line interface for Vercel
+cask "vercel"  # Command-line interface for Vercel (the formula was retired)
 brew "supabase/tap/supabase"  # Supabase CLI
 brew "helm"  # Kubernetes package manager
 brew "kubernetes-cli"  # Kubernetes command-line interface
