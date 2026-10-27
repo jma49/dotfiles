@@ -16,7 +16,11 @@
 # The `typeset -U path` command ensures that each entry is unique.
 typeset -U path
 path=(
-  # Homebrew should be first to take precedence over system binaries.
+  # Rust toolchain (Homebrew rustup) and bun
+  /opt/homebrew/opt/rustup/bin
+  $HOME/.cargo/bin
+  $HOME/.bun/bin
+  # Homebrew next, to take precedence over system binaries.
   /opt/homebrew/sbin
   /opt/homebrew/bin
 )
@@ -373,3 +377,6 @@ setopt HIST_IGNORE_SPACE    # Don't record commands that start with a space.
 # zoxide configuration
 eval "$(zoxide init zsh)"
 
+# bun
+export BUN_INSTALL="$HOME/.bun"
+[ -s "$BUN_INSTALL/_bun" ] && source "$BUN_INSTALL/_bun"

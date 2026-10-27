@@ -8,9 +8,15 @@ on:
 permissions:
   contents: read
 
+# A newer push to the same branch makes the older run pointless.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   lint:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     env:
       # Same versions as the Brewfile installs locally, so formatting agrees
       STYLUA_VERSION: v2.5.2
@@ -48,6 +54,13 @@ jobs:
       - name: TOML formatting (taplo)
         run: taplo fmt --check $(git ls-files '*.toml' | grep -v '/flavors/')
 
+      - name: JSON parses (Zed themes, plugin manifests)
+        run: |
+          # Zed's settings.json and keymap.json are JSONC (comments allowed).
+          for file in $(git ls-files '*.json' | grep -vE '^zed/\.config/zed/(settings|keymap)\.json$'); do
+            jq empty "$file"
+          done
+
       - name: Python syntax (kitty tab bar, Zed theme generator)
         run: python3 -m py_compile kitty/.config/kitty/tab_bar.py zed/build-catppuccin-blur-2.py
 
@@ -61,3 +74,29 @@ jobs:
           for package in */; do
             stow --no --verbose=1 --target "$home" --restow "${package%/}"
           done
+
+  # Homebrew only exists on macOS, so the Brewfile is checked on its own runner:
+  # it parses, and every formula and cask it names still exists.
+  brewfile:
+    runs-on: macos-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Brewfile parses and every package exists
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: 1
+        run: |
+          # The runner image can predate a cask (magpie was missing), so refresh
+          # Homebrew's index once, then keep the rest of the job offline.
+          brew update --quiet
+          for tap in fwartner/tap supabase/tap anomalyco/tap; do
+            brew tap "$tap"
+            brew trust --tap "$tap"
+          done
+          brew bundle list --file Brewfile --all > /dev/null
+          formulae=$(sed -nE 's/^brew "([^"]+)".*/\1/p' Brewfile)
+          casks=$(sed -nE 's/^cask "([^"]+)".*/\1/p' Brewfile)
+          brew info --json=v2 --formula $formulae > /dev/null
+          brew info --json=v2 --cask $casks > /dev/null
+
