@@ -3,6 +3,7 @@
 
 tap "fwartner/tap", trusted: true
 tap "supabase/tap"
+tap "anomalyco/tap"
 
 # --- Shell and prompt ---
 brew "antidote"  # Plugin manager for zsh, inspired by antigen and antibody
@@ -45,6 +46,7 @@ brew "pkgconf"  # Package compiler and linker metadata toolkit
 brew "openjdk"  # Development kit for the Java programming language
 brew "maven"  # Java-based project management
 brew "poetry"  # Python package management tool
+brew "rustup"  # Rust toolchain installer
 
 # --- Cloud, databases and APIs ---
 brew "vercel"  # Command-line interface for Vercel
@@ -71,6 +73,7 @@ brew "gdu"  # Disk usage analyzer with console interface written in Go
 brew "fastfetch"  # Like neofetch, but much faster because written mostly in C
 brew "fwartner/tap/mac-cleanup", trusted: true  # 🗑️ cleanup script for macos
 brew "mole"  # Deep clean and optimize your Mac
+cask "stats"  # System monitor for the menu bar
 
 # --- File manager ---
 brew "yazi"  # Blazing fast terminal file manager written in Rust, based on async I/O
@@ -78,15 +81,20 @@ brew "yazi"  # Blazing fast terminal file manager written in Rust, based on asyn
 # --- Terminal and editors ---
 cask "kitty"  # GPU-based terminal emulator
 cask "zed"  # Multiplayer code editor
-cask "codex"  # OpenAI's coding agent that runs in your terminal
 cask "typora"  # Configurable document editor that supports Markdown
+
+# --- AI agents and models ---
+cask "codex"  # OpenAI's coding agent that runs in your terminal
+cask "t3-code@nightly"  # Minimal GUI for AI code agents, nightly channel
+cask "magpie"  # Model gateway for AI coding agents
+brew "rtk"  # CLI proxy to minimize LLM token consumption
+brew "anomalyco/tap/opencode-v2"  # AI coding agent for the terminal
 
 # --- Development ---
 cask "orbstack"  # Replacement for Docker Desktop
 cask "gcloud-cli"  # Set of tools to manage resources and applications hosted on Google Cloud
 cask "mitmproxy"  # Intercept, modify, replay, save HTTP/S traffic
 cask "macfuse"  # File system integration
-cask "postman"  # Collaboration platform for API development
 
 # --- Browsers and AI apps ---
 cask "google-chrome"  # Web browser
@@ -101,10 +109,10 @@ cask "numi"  # Calculator and converter application
 cask "pronotes"  # Apple Notes extension
 cask "reminders-menubar"  # Simple menu bar app to view and interact with reminders
 cask "thaw"  # Menu bar manager
+cask "dockdoor"  # Window peeking utility app
 cask "only-switch"  # System and utility switches
 cask "squirrel-app"  # Rime input method engine
 cask "raycast"  # Control your tools with a few keystrokes
-cask "notion"  # App to write, plan, collaborate, and get organised
 cask "muse"  # AI assistant for managing tasks, projects, and long-term goals
 cask "keka"  # File archiver
 cask "mos"  # Smooths scrolling and set mouse scroll directions independently
@@ -118,12 +126,12 @@ cask "kap"  # Open-source screen recorder built with web technology
 cask "veracrypt"  # Disk encryption software focusing on security based on TrueCrypt
 cask "telegram"  # Messaging app with a focus on speed and security
 cask "wechat"  # Free messaging and calling application
-cask "whatsapp"  # Native desktop client for WhatsApp
 cask "iina"  # Free and open-source media player
 
-# --- Fonts: Maple Mono NF (terminals) and NF CN (Zed editor, CJK in kitty) ---
+# --- Fonts: Maple Mono NF (terminals) and NF CN (Zed, T3 Code, CJK in kitty) ---
 cask "font-maple-mono-nf-cn"
 cask "font-maple-mono-nf"
+cask "font-maple-mono-normal-nf-cn"
 
 # --- Mac App Store (needs an App Store sign-in; ids from `mas list`) ---
 mas "Xcode", id: 497799835
@@ -138,4 +146,5 @@ mas "Pixea", id: 1507782672
 npm "@anthropic-ai/claude-code"
 npm "ccstatusline"
 npm "neon"
+npm "pnpm"
 npm "pyright"
