@@ -9,7 +9,7 @@
 #   ./install.sh          preflight, then do only what is missing
 #   ./install.sh --check  preflight report only, change nothing
 
-set -e
+set -eu
 
 GITHUB_USERNAME="jma49"
 DOTFILES_DIR="$HOME/dotfiles"
@@ -162,18 +162,29 @@ fi
 
 # 5. Stow links. Stow refuses to replace real files, and a fresh Mac already has some
 # (e.g. ~/.zshrc), so back those up first; packages already linked are skipped.
+# Every file in a package is checked, not just the top level, so a real file deeper
+# down (e.g. ~/.config/kitty/kitty.conf) is backed up too.
 BACKUP_DIR="$HOME/.dotfiles-backup/$(date +%Y%m%d-%H%M%S)"
 for package in $(packages); do
   stow_ok "$package" && continue
   while IFS= read -r file; do
-    target="$HOME/${file#"$package"/}"
-    if [ -f "$target" ] && [ ! -L "$target" ]; then
-      mkdir -p "$BACKUP_DIR"
-      mv "$target" "$BACKUP_DIR/"
-      info "Backed up $target to $BACKUP_DIR"
-    fi
-  done < <(find "$package" -mindepth 1 -maxdepth 1 -type f ! -name '.stow-local-ignore')
-  stow "$package"
+    rel="${file#"$package"/}"
+    target="$HOME/$rel"
+    [ -e "$target" ] || continue
+    [ -L "$target" ] && continue
+    # A file inside a directory Stow already linked is a repo file, not a real one.
+    dir=$(dirname "$target")
+    linked=false
+    while [ "$dir" != "$HOME" ] && [ "$dir" != / ]; do
+      if [ -L "$dir" ]; then linked=true; break; fi
+      dir=$(dirname "$dir")
+    done
+    $linked && continue
+    mkdir -p "$BACKUP_DIR/$(dirname "$rel")"
+    mv "$target" "$BACKUP_DIR/$rel"
+    info "Backed up $target to $BACKUP_DIR/$rel"
+  done < <(find "$package" -type f ! -name '.stow-local-ignore')
+  stow "$package" || fail "Stow could not link $package: move the conflicting files out of the way and rerun."
   success "Linked $package"
 done
 
