@@ -92,6 +92,7 @@ jobs:
           brew update --quiet
           for tap in fwartner/tap supabase/tap anomalyco/tap; do
             brew tap "$tap"
+            brew trust --tap "$tap"
           done
           brew bundle list --file Brewfile --all > /dev/null
           formulae=$(sed -nE 's/^brew "([^"]+)".*/\1/p' Brewfile)

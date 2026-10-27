@@ -2,8 +2,8 @@
 # `brew bundle dump`. Dependencies Homebrew pulls in on its own are left out.
 
 tap "fwartner/tap", trusted: true
-tap "supabase/tap"
-tap "anomalyco/tap"
+tap "supabase/tap", trusted: true
+tap "anomalyco/tap", trusted: true
 
 # --- Shell and prompt ---
 brew "antidote"  # Plugin manager for zsh, inspired by antigen and antibody
@@ -50,7 +50,7 @@ brew "rustup"  # Rust toolchain installer
 
 # --- Cloud, databases and APIs ---
 cask "vercel"  # Command-line interface for Vercel (the formula was retired)
-brew "supabase/tap/supabase"  # Supabase CLI
+brew "supabase/tap/supabase", trusted: true  # Supabase CLI
 brew "helm"  # Kubernetes package manager
 brew "kubernetes-cli"  # Kubernetes command-line interface
 brew "postgresql@17"  # Object-relational database system
@@ -88,7 +88,7 @@ cask "codex"  # OpenAI's coding agent that runs in your terminal
 cask "t3-code@nightly"  # Minimal GUI for AI code agents, nightly channel
 cask "magpie"  # Model gateway for AI coding agents
 brew "rtk"  # CLI proxy to minimize LLM token consumption
-brew "anomalyco/tap/opencode-v2"  # AI coding agent for the terminal
+brew "anomalyco/tap/opencode-v2", trusted: true  # AI coding agent for the terminal
 
 # --- Development ---
 cask "orbstack"  # Replacement for Docker Desktop
