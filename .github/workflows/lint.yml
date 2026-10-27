@@ -87,6 +87,9 @@ jobs:
         env:
           HOMEBREW_NO_AUTO_UPDATE: 1
         run: |
+          # The runner image can predate a cask (magpie was missing), so refresh
+          # Homebrew's index once, then keep the rest of the job offline.
+          brew update --quiet
           for tap in fwartner/tap supabase/tap anomalyco/tap; do
             brew tap "$tap"
           done
