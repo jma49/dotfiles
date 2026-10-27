@@ -84,8 +84,12 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Brewfile parses and every package exists
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: 1
         run: |
-          brew tap fwartner/tap supabase/tap anomalyco/tap
+          for tap in fwartner/tap supabase/tap anomalyco/tap; do
+            brew tap "$tap"
+          done
           brew bundle list --file Brewfile --all > /dev/null
           formulae=$(sed -nE 's/^brew "([^"]+)".*/\1/p' Brewfile)
           casks=$(sed -nE 's/^cask "([^"]+)".*/\1/p' Brewfile)
