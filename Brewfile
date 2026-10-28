@@ -123,7 +123,7 @@ cask "telegram"  # Messaging app with a focus on speed and security
 cask "wechat"  # Free messaging and calling application
 cask "iina"  # Free and open-source media player
 
-# --- Fonts: Maple Mono NF (terminals) and NF CN (Zed, T3 Code, CJK in kitty) ---
+# --- Fonts: Maple Mono NF (terminals) and NF CN (T3 Code, CJK in kitty) ---
 cask "font-maple-mono-nf-cn"
 cask "font-maple-mono-nf"
 cask "font-maple-mono-normal-nf-cn"
