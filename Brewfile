@@ -1,7 +1,6 @@
 # Homebrew bundle: `brew bundle install` installs it all; keep it in sync with
 # `brew bundle dump`. Dependencies Homebrew pulls in on its own are left out.
 
-tap "fwartner/tap", trusted: true
 tap "supabase/tap", trusted: true
 tap "anomalyco/tap", trusted: true
 
@@ -71,7 +70,6 @@ brew "bottom"  # Yet another cross-platform graphical process/system monitor
 brew "dust"  # More intuitive version of du in rust
 brew "gdu"  # Disk usage analyzer with console interface written in Go
 brew "fastfetch"  # Like neofetch, but much faster because written mostly in C
-brew "fwartner/tap/mac-cleanup", trusted: true  # 🗑️ cleanup script for macos
 brew "mole"  # Deep clean and optimize your Mac
 cask "stats"  # System monitor for the menu bar
 
