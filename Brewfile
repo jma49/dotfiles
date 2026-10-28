@@ -78,7 +78,6 @@ brew "yazi"  # Blazing fast terminal file manager written in Rust, based on asyn
 
 # --- Terminal and editors ---
 cask "kitty"  # GPU-based terminal emulator
-cask "zed"  # Multiplayer code editor
 cask "typora"  # Configurable document editor that supports Markdown
 
 # --- AI agents and models ---
@@ -96,12 +95,10 @@ cask "macfuse"  # File system integration
 
 # --- Browsers and AI apps ---
 cask "google-chrome"  # Web browser
-cask "firefox"  # Web browser
 cask "chatgpt"  # OpenAI's official ChatGPT desktop app
 cask "claude"  # Anthropic's official Claude AI desktop app
 
 # --- Productivity and notes ---
-cask "obsidian"  # Knowledge base that works on top of a local folder of plain text Markdown files
 cask "zotero"  # Collect, organise, cite, and share research sources
 cask "numi"  # Calculator and converter application
 cask "pronotes"  # Apple Notes extension
