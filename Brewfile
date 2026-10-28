@@ -1,7 +1,6 @@
 # Homebrew bundle: `brew bundle install` installs it all; keep it in sync with
 # `brew bundle dump`. Dependencies Homebrew pulls in on its own are left out.
 
-tap "fwartner/tap", trusted: true
 tap "supabase/tap", trusted: true
 tap "anomalyco/tap", trusted: true
 
@@ -71,7 +70,6 @@ brew "bottom"  # Yet another cross-platform graphical process/system monitor
 brew "dust"  # More intuitive version of du in rust
 brew "gdu"  # Disk usage analyzer with console interface written in Go
 brew "fastfetch"  # Like neofetch, but much faster because written mostly in C
-brew "fwartner/tap/mac-cleanup", trusted: true  # 🗑️ cleanup script for macos
 brew "mole"  # Deep clean and optimize your Mac
 cask "stats"  # System monitor for the menu bar
 
@@ -80,7 +78,6 @@ brew "yazi"  # Blazing fast terminal file manager written in Rust, based on asyn
 
 # --- Terminal and editors ---
 cask "kitty"  # GPU-based terminal emulator
-cask "zed"  # Multiplayer code editor
 cask "typora"  # Configurable document editor that supports Markdown
 
 # --- AI agents and models ---
@@ -98,12 +95,10 @@ cask "macfuse"  # File system integration
 
 # --- Browsers and AI apps ---
 cask "google-chrome"  # Web browser
-cask "firefox"  # Web browser
 cask "chatgpt"  # OpenAI's official ChatGPT desktop app
 cask "claude"  # Anthropic's official Claude AI desktop app
 
 # --- Productivity and notes ---
-cask "obsidian"  # Knowledge base that works on top of a local folder of plain text Markdown files
 cask "zotero"  # Collect, organise, cite, and share research sources
 cask "numi"  # Calculator and converter application
 cask "pronotes"  # Apple Notes extension
@@ -128,7 +123,7 @@ cask "telegram"  # Messaging app with a focus on speed and security
 cask "wechat"  # Free messaging and calling application
 cask "iina"  # Free and open-source media player
 
-# --- Fonts: Maple Mono NF (terminals) and NF CN (Zed, T3 Code, CJK in kitty) ---
+# --- Fonts: Maple Mono NF (terminals) and NF CN (T3 Code, CJK in kitty) ---
 cask "font-maple-mono-nf-cn"
 cask "font-maple-mono-nf"
 cask "font-maple-mono-normal-nf-cn"
