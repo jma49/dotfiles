@@ -73,6 +73,13 @@ It only does what is missing, so reruns are cheap and change nothing that is in 
 
 Run `./install.sh --check` to see that report without changing anything.
 
+For a headless or always-on Mac (a home server, a remote exit node), `./install.sh --minimal`
+installs only [`Brewfile.minimal`](Brewfile.minimal): the shell and its tools, git, Neovim, yazi,
+btop and kitty with its fonts, about 1 GB instead of the full setup's tens of GB. It links the
+`bat git kitty lsd nvim starship yazi zsh` packages and skips uv, herdr and the Claude Code
+tooling. The choice is saved in `~/.config/dotfiles/profile`, so a plain rerun stays minimal;
+`./install.sh --full` switches that Mac to the full setup.
+
 Each top-level directory is a Stow package mirroring `$HOME`, so `kitty/.config/kitty/kitty.conf`
 becomes `~/.config/kitty/kitty.conf`. Edit files in the repo; the links pick changes up.
 

@@ -6,15 +6,24 @@
 # Every step checks first and skips what is already done, so reruns are cheap
 # and change nothing that is already in place.
 #
-#   ./install.sh          preflight, then do only what is missing
-#   ./install.sh --check  preflight report only, change nothing
+#   ./install.sh            preflight, then do only what is missing
+#   ./install.sh --check    preflight report only, change nothing
+#   ./install.sh --minimal  shell, git, Neovim, yazi and kitty only (Brewfile.minimal):
+#                           for a headless or always-on Mac, no apps, runtimes or agents
+#   ./install.sh --full     back to everything on a Mac that was set up minimal
+#
+# The profile is remembered in ~/.config/dotfiles/profile, so a plain rerun on a
+# minimal Mac stays minimal instead of pulling in the whole Brewfile.
 
 set -eu
 
 GITHUB_USERNAME="jma49"
 DOTFILES_DIR="$HOME/dotfiles"
 CHECK_ONLY=false
-[ "${1:-}" = "--check" ] && CHECK_ONLY=true
+PROFILE=""
+PROFILE_FILE="$HOME/.config/dotfiles/profile"
+# Stow packages the minimal profile links (no zed, herdr or claude)
+MINIMAL_PACKAGES="bat git kitty lsd nvim starship yazi zsh"
 
 COLOR_GREEN='\033[0;32m'
 COLOR_YELLOW='\033[0;33m'
@@ -35,6 +44,22 @@ report() {
     printf "  ${COLOR_YELLOW}•${COLOR_NC} %s ${COLOR_DIM}%s${COLOR_NC}\n" "$label" "$todo_detail"
   fi
 }
+
+for arg in "$@"; do
+  case $arg in
+    --check) CHECK_ONLY=true ;;
+    --minimal) PROFILE=minimal ;;
+    --full) PROFILE=full ;;
+    *) fail "Unknown option: $arg (use --check, --minimal or --full)" ;;
+  esac
+done
+[ -n "$PROFILE" ] || PROFILE=$(cat "$PROFILE_FILE" 2> /dev/null || echo full)
+case $PROFILE in
+  minimal) BREWFILE="$DOTFILES_DIR/Brewfile.minimal" ;;
+  full) BREWFILE="$DOTFILES_DIR/Brewfile" ;;
+  *) fail "Unknown profile '$PROFILE' in $PROFILE_FILE (minimal or full)." ;;
+esac
+minimal() { [ "$PROFILE" = minimal ]; }
 
 # --- Hard requirements: stop early instead of failing halfway ----------------
 
@@ -59,7 +84,7 @@ repo_ok() { [ -d "$DOTFILES_DIR/.git" ]; }
 # Apps already in /Applications count as installed (see preinstalled_casks)
 bundle_ok() {
   [ -n "${CASK_SKIP+set}" ] || CASK_SKIP=$(preinstalled_casks | tr '\n' ' ')
-  HOMEBREW_BUNDLE_CASK_SKIP="$CASK_SKIP" brew bundle check --no-upgrade --file="$DOTFILES_DIR/Brewfile" &> /dev/null
+  HOMEBREW_BUNDLE_CASK_SKIP="$CASK_SKIP" brew bundle check --no-upgrade --file="$BREWFILE" &> /dev/null
 }
 # A Stow package is linked when a dry run has nothing left to do
 stow_ok() { [ -z "$(cd "$DOTFILES_DIR" && stow -n -v "$1" 2>&1 | grep -v 'WARNING: in simulation')" ]; }
@@ -67,13 +92,19 @@ marketplace_ok() { claude plugin marketplace list 2>/dev/null | grep -q '❯ dot
 plugin_ok() { claude plugin list 2>/dev/null | grep -q '❯ agent-status@dotfiles'; }
 herdr_hook_ok() { herdr integration status 2>/dev/null | grep -q '^claude: current'; }
 
-packages() { (cd "$DOTFILES_DIR" && for package in */; do echo "${package%/}"; done); }
+packages() {
+  if minimal; then
+    for package in $MINIMAL_PACKAGES; do echo "$package"; done
+  else
+    (cd "$DOTFILES_DIR" && for package in */; do echo "${package%/}"; done)
+  fi
+}
 
 # Casks whose app is already in /Applications but wasn't installed by Homebrew
 # (installed by hand or from a DMG): brew bundle would fail on them, so skip them.
 preinstalled_casks() {
   local casks
-  casks=$(grep -E '^cask ' "$DOTFILES_DIR/Brewfile" | sed -E 's/cask "([^"]+)".*/\1/')
+  casks=$(grep -E '^cask ' "$BREWFILE" | sed -E 's/cask "([^"]+)".*/\1/')
   [ -n "$casks" ] || return 0
   # shellcheck disable=SC2086
   brew info --json=v2 --cask $casks 2> /dev/null | /usr/bin/python3 -c '
@@ -89,22 +120,26 @@ for cask in json.load(sys.stdin)["casks"]:
 # --- Preflight report ----------------------------------------------------------
 
 echo
-info "Preflight"
+info "Preflight ($PROFILE profile)"
 report "Homebrew" "installed" "will install" have brew
 report "dotfiles repo" "$DOTFILES_DIR" "will clone to $DOTFILES_DIR" repo_ok
 if have brew && repo_ok; then
-  report "Brewfile" "everything installed" "missing packages will install" bundle_ok
+  report "$(basename "$BREWFILE")" "everything installed" "missing packages will install" bundle_ok
 fi
-report "uv" "installed" "will install" have uv
-report "herdr" "installed" "will install" have herdr
-report "latex2text" "installed" "will install with uv" have latex2text
+if ! minimal; then
+  report "uv" "installed" "will install" have uv
+  report "herdr" "installed" "will install" have herdr
+  report "latex2text" "installed" "will install with uv" have latex2text
+fi
 if have stow && repo_ok; then
   unlinked=$(packages | while read -r p; do stow_ok "$p" || printf "%s " "$p"; done)
   report "Stow links" "all packages" "will link: $unlinked" test -z "$unlinked"
 else
   report "Stow links" "" "after Homebrew installs stow" false
 fi
-if have claude; then
+if minimal; then
+  : # no agent tooling on a minimal Mac
+elif have claude; then
   report "Claude Code plugin" "agent-status" "will install" plugin_ok
   if have herdr; then
     report "herdr Claude integration" "installed" "will install" herdr_hook_ok
@@ -135,11 +170,14 @@ if ! repo_ok; then
 fi
 cd "$DOTFILES_DIR"
 
+mkdir -p "$(dirname "$PROFILE_FILE")"
+echo "$PROFILE" > "$PROFILE_FILE"
+
 # 3. Brewfile: install what's missing, never upgrade what's there
 if ! bundle_ok; then
   [ -n "$CASK_SKIP" ] && info "Already in /Applications, skipping: $CASK_SKIP"
-  info "Installing missing packages from the Brewfile..."
-  if HOMEBREW_BUNDLE_CASK_SKIP="$CASK_SKIP" brew bundle install --no-upgrade --file="$DOTFILES_DIR/Brewfile"; then
+  info "Installing missing packages from $(basename "$BREWFILE")..."
+  if HOMEBREW_BUNDLE_CASK_SKIP="$CASK_SKIP" brew bundle install --no-upgrade --file="$BREWFILE"; then
     success "Brewfile installed."
   else
     info "Some packages failed (App Store apps need a sign-in); rerun later to retry just those."
@@ -147,16 +185,18 @@ if ! bundle_ok; then
 fi
 
 # 4. Tools with their own installers, into ~/.local/bin like on the current Mac
-if ! have uv; then
+if minimal; then
+  : # none of these on a minimal Mac
+elif ! have uv; then
   info "Installing uv..."
   curl -LsSf https://astral.sh/uv/install.sh | sh || info "uv install failed; rerun later."
 fi
-if ! have herdr; then
+if ! minimal && ! have herdr; then
   info "Installing herdr..."
   curl -fsSL https://herdr.dev/install.sh | sh || info "herdr install failed; rerun later."
 fi
 # latex2text renders LaTeX in Neovim's render-markdown
-if ! have latex2text && have uv; then
+if ! minimal && ! have latex2text && have uv; then
   uv tool install pylatexenc || info "latex2text install failed; rerun later."
 fi
 
@@ -189,7 +229,9 @@ for package in $(packages); do
 done
 
 # 6. Claude Code: the agent-status plugin and herdr's integration (see README)
-if have claude; then
+if minimal; then
+  : # no agent tooling on a minimal Mac
+elif have claude; then
   marketplace_ok || claude plugin marketplace add "$HOME/.claude/dotfiles-plugins" || true
   plugin_ok || claude plugin install agent-status@dotfiles || true
   if have herdr && ! herdr_hook_ok; then

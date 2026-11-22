@@ -67,6 +67,12 @@ jobs:
       - name: Zed theme matches its generator
         run: python3 zed/build-catppuccin-blur-2.py --check
 
+      - name: Brewfile.minimal is a subset of the Brewfile
+        run: |
+          entries() { grep -oE '^(brew|cask) "[^"]+"' "$1" | sort -u; }
+          missing=$(comm -23 <(entries Brewfile.minimal) <(entries Brewfile))
+          [ -z "$missing" ] || { echo "Only in Brewfile.minimal:"; echo "$missing"; exit 1; }
+
       - name: Every package stows cleanly into an empty home
         run: |
           home="$(mktemp -d)"

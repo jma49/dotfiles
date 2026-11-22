@@ -1,0 +1,38 @@
+# Minimal profile (`./install.sh --minimal`): the shell, git, Neovim, yazi and
+# kitty from the main Brewfile, for a headless or always-on Mac. Every entry
+# here must also be in the Brewfile (CI checks it); no apps, runtimes or agents.
+
+# --- Shell and prompt ---
+brew "antidote"  # Plugin manager for zsh, inspired by antigen and antibody
+brew "starship"  # Cross-shell prompt for astronauts
+brew "zoxide"  # Shell extension to navigate your filesystem faster
+brew "fzf"  # Command-line fuzzy finder written in Go
+brew "fd"  # Simple, fast and user-friendly alternative to find
+brew "ripgrep"  # Search tool like grep and The Silver Searcher
+brew "bat"  # Clone of cat(1) with syntax highlighting and Git integration
+brew "lsd"  # Clone of ls with colorful output, file type icons, and more
+brew "tree"  # Display directories as trees (with optional color/HTML output)
+brew "stow"  # Organize software neatly under a single directory tree (e.g. /usr/local)
+brew "jq"  # Lightweight and flexible command-line JSON processor
+
+# --- Git ---
+brew "git"  # Distributed revision control system
+brew "git-delta"  # Syntax-highlighting pager for git and diff output
+brew "gh"  # GitHub command-line tool
+brew "lazygit"  # Simple terminal UI for git commands
+
+# --- Editor ---
+brew "neovim"  # Ambitious Vim-fork focused on extensibility and agility
+brew "tree-sitter-cli"  # Parser generator tool
+
+# --- System monitoring ---
+brew "btop"  # Resource monitor. C++ version and continuation of bashtop and bpytop
+brew "dust"  # More intuitive version of du in rust
+
+# --- File manager ---
+brew "yazi"  # Blazing fast terminal file manager written in Rust, based on async I/O
+
+# --- Terminal (kitty uses Maple Mono NF, NF CN for CJK) ---
+cask "kitty"  # GPU-based terminal emulator
+cask "font-maple-mono-nf-cn"
+cask "font-maple-mono-nf"
