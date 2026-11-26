@@ -1,0 +1,46 @@
+# Work Mac profile (`./install.sh --work`): lean terminal, shell, git, Neovim,
+# herdr, yazi, linters, kitty and fonts — zero personal GUI apps, no Mac App
+# Store entries, no kernel extensions and no third-party AI apps.
+# Every entry here must also be in the Brewfile (CI checks it).
+
+# --- Shell and prompt ---
+brew "antidote"  # Plugin manager for zsh, inspired by antigen and antibody
+brew "starship"  # Cross-shell prompt for astronauts
+brew "zoxide"  # Shell extension to navigate your filesystem faster
+brew "fzf"  # Command-line fuzzy finder written in Go
+brew "fd"  # Simple, fast and user-friendly alternative to find
+brew "ripgrep"  # Search tool like grep and The Silver Searcher
+brew "bat"  # Clone of cat(1) with syntax highlighting and Git integration
+brew "lsd"  # Clone of ls with colorful output, file type icons, and more
+brew "tree"  # Display directories as trees (with optional color/HTML output)
+brew "stow"  # Organize software neatly under a single directory tree (e.g. /usr/local)
+brew "jq"  # Lightweight and flexible command-line JSON processor
+brew "wget"  # Internet file retriever
+brew "lsof"  # Utility to list open files
+
+# --- Git ---
+brew "git"  # Distributed revision control system
+brew "git-delta"  # Syntax-highlighting pager for git and diff output
+brew "gh"  # GitHub command-line tool
+brew "lazygit"  # Simple terminal UI for git commands
+
+# --- Editor and linters ---
+brew "neovim"  # Ambitious Vim-fork focused on extensibility and agility
+brew "tree-sitter-cli"  # Parser generator tool
+brew "shellcheck"  # Static analysis for shell scripts (CI lint)
+brew "stylua"  # Lua formatter (CI lint, nvim config)
+brew "taplo"  # TOML formatter and linter (CI lint)
+brew "gitleaks"  # Secret scanner (CI; run `gitleaks git` before pushing)
+
+# --- Docs, monitoring and file manager ---
+brew "glow"  # Render markdown on the CLI
+brew "btop"  # Resource monitor. C++ version and continuation of bashtop and bpytop
+brew "dust"  # More intuitive version of du in rust
+brew "yazi"  # Blazing fast terminal file manager written in Rust, based on async I/O
+
+# --- Terminal and fonts ---
+brew "herdr"  # Terminal workspace manager for coding agents
+cask "kitty"  # GPU-based terminal emulator
+cask "font-maple-mono-nf-cn"
+cask "font-maple-mono-nf"
+cask "font-maple-mono-normal-nf-cn"

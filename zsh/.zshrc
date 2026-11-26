@@ -109,11 +109,13 @@ export FZF_DEFAULT_OPTS=" \
 export FZF_CTRL_T_OPTS="--preview 'bat --color=always --style=numbers --line-range=:300 {}'"
 export FZF_ALT_C_OPTS="--preview 'lsd --tree --depth 2 --color=always --icon=always {}'"
 
-# Alt-J: jump to a project (dotfiles, ~/Code, ~/Code/personal, ~/.config) with a
+# Alt-J: jump to a project (dotfiles, ~/Code, ~/Work, ~/src, ~/.config) with a
 # tree preview; complements zoxide, which only knows directories already visited
 fzf-project-widget() {
   local dir
-  dir=$( { print -r -- ~/dotfiles; fd --type d --max-depth 1 --absolute-path . ~/Code ~/Code/personal ~/.config 2>/dev/null; } |
+  local -a roots=(~/Code ~/Code/personal ~/Work ~/work ~/src ~/.config)
+  roots=(${^roots}(N/))
+  dir=$( { print -r -- ~/dotfiles; (( $#roots )) && fd --type d --max-depth 1 --absolute-path . $roots 2>/dev/null; } |
     fzf --height=60% --reverse --prompt='project> ' \
       --preview 'lsd --tree --depth 2 --color=always --icon=always {}') || { zle reset-prompt; return }
   # Run the cd as a command so prompt and chpwd hooks behave as if typed

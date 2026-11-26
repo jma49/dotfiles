@@ -10,10 +10,12 @@
 #   ./install.sh --check    preflight report only, change nothing
 #   ./install.sh --minimal  shell, git, Neovim, yazi and kitty only (Brewfile.minimal):
 #                           for a headless or always-on Mac, no apps, runtimes or agents
-#   ./install.sh --full     back to everything on a Mac that was set up minimal
+#   ./install.sh --work     lean work Mac setup (Brewfile.work): terminal, shell, git,
+#                           Neovim, herdr, yazi, linters, kitty and fonts only
+#   ./install.sh --full     back to everything on a Mac that was set up minimal or work
 #
 # The profile is remembered in ~/.config/dotfiles/profile, so a plain rerun on a
-# minimal Mac stays minimal instead of pulling in the whole Brewfile.
+# minimal or work Mac stays on that profile instead of pulling in the whole Brewfile.
 
 set -eu
 
@@ -22,8 +24,9 @@ DOTFILES_DIR="$HOME/dotfiles"
 CHECK_ONLY=false
 PROFILE=""
 PROFILE_FILE="$HOME/.config/dotfiles/profile"
-# Stow packages the minimal profile links (no zed, herdr or claude)
+# Stow packages each profile links
 MINIMAL_PACKAGES="bat git kitty lsd nvim starship yazi zsh"
+WORK_PACKAGES="bat git herdr kitty lsd nvim starship yazi zsh"
 
 COLOR_GREEN='\033[0;32m'
 COLOR_YELLOW='\033[0;33m'
@@ -49,17 +52,20 @@ for arg in "$@"; do
   case $arg in
     --check) CHECK_ONLY=true ;;
     --minimal) PROFILE=minimal ;;
+    --work) PROFILE=work ;;
     --full) PROFILE=full ;;
-    *) fail "Unknown option: $arg (use --check, --minimal or --full)" ;;
+    *) fail "Unknown option: $arg (use --check, --minimal, --work or --full)" ;;
   esac
 done
 [ -n "$PROFILE" ] || PROFILE=$(cat "$PROFILE_FILE" 2> /dev/null || echo full)
 case $PROFILE in
   minimal) BREWFILE="$DOTFILES_DIR/Brewfile.minimal" ;;
+  work) BREWFILE="$DOTFILES_DIR/Brewfile.work" ;;
   full) BREWFILE="$DOTFILES_DIR/Brewfile" ;;
-  *) fail "Unknown profile '$PROFILE' in $PROFILE_FILE (minimal or full)." ;;
+  *) fail "Unknown profile '$PROFILE' in $PROFILE_FILE (minimal, work or full)." ;;
 esac
 minimal() { [ "$PROFILE" = minimal ]; }
+full() { [ "$PROFILE" = full ]; }
 
 # --- Hard requirements: stop early instead of failing halfway ----------------
 
@@ -92,12 +98,14 @@ marketplace_ok() { claude plugin marketplace list 2>/dev/null | grep -q '❯ dot
 plugin_ok() { claude plugin list 2>/dev/null | grep -q '❯ agent-status@dotfiles'; }
 herdr_hook_ok() { herdr integration status 2>/dev/null | grep -q '^claude: current'; }
 
+git_identity_ok() { [ -n "$(git config --get user.email 2>/dev/null || true)" ]; }
+
 packages() {
-  if minimal; then
-    for package in $MINIMAL_PACKAGES; do echo "$package"; done
-  else
-    (cd "$DOTFILES_DIR" && for package in */; do echo "${package%/}"; done)
-  fi
+  case $PROFILE in
+    minimal) for package in $MINIMAL_PACKAGES; do echo "$package"; done ;;
+    work) for package in $WORK_PACKAGES; do echo "$package"; done ;;
+    full) (cd "$DOTFILES_DIR" && for package in */; do echo "${package%/}"; done) ;;
+  esac
 }
 
 # Casks whose app is already in /Applications but wasn't installed by Homebrew
@@ -128,7 +136,6 @@ if have brew && repo_ok; then
 fi
 if ! minimal; then
   report "uv" "installed" "will install" have uv
-  report "herdr" "installed" "will install" have herdr
   report "latex2text" "installed" "will install with uv" have latex2text
 fi
 if have stow && repo_ok; then
@@ -137,8 +144,9 @@ if have stow && repo_ok; then
 else
   report "Stow links" "" "after Homebrew installs stow" false
 fi
-if minimal; then
-  : # no agent tooling on a minimal Mac
+report "Git identity" "configured" "set [user] in ~/.gitconfig.local" git_identity_ok
+if ! full; then
+  : # no personal Claude Code plugin setup on minimal or work Macs
 elif have claude; then
   report "Claude Code plugin" "agent-status" "will install" plugin_ok
   if have herdr; then
@@ -191,10 +199,6 @@ elif ! have uv; then
   info "Installing uv..."
   curl -LsSf https://astral.sh/uv/install.sh | sh || info "uv install failed; rerun later."
 fi
-if ! minimal && ! have herdr; then
-  info "Installing herdr..."
-  curl -fsSL https://herdr.dev/install.sh | sh || info "herdr install failed; rerun later."
-fi
 # latex2text renders LaTeX in Neovim's render-markdown
 if ! minimal && ! have latex2text && have uv; then
   uv tool install pylatexenc || info "latex2text install failed; rerun later."
@@ -229,8 +233,8 @@ for package in $(packages); do
 done
 
 # 6. Claude Code: the agent-status plugin and herdr's integration (see README)
-if minimal; then
-  : # no agent tooling on a minimal Mac
+if ! full; then
+  : # no personal Claude Code plugin setup on minimal or work Macs
 elif have claude; then
   marketplace_ok || claude plugin marketplace add "$HOME/.claude/dotfiles-plugins" || true
   plugin_ok || claude plugin install agent-status@dotfiles || true
@@ -239,6 +243,11 @@ elif have claude; then
   fi
 else
   info "claude not found yet; rerun after the Brewfile installs it to add the plugin."
+fi
+
+if ! git_identity_ok; then
+  info "Git identity is not set yet. Add your name and email to ~/.gitconfig.local:"
+  printf '  [user]\n    name = Your Name\n    email = you@example.com\n'
 fi
 
 echo

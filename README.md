@@ -66,26 +66,26 @@ Xcode Command Line Tools and a network connection, then reports which steps are 
 It only does what is missing, so reruns are cheap and change nothing that is in place:
 
 1. installs Homebrew if needed, then whatever the [`Brewfile`](Brewfile) lists that isn't installed: CLI tools, apps, fonts, Mac App Store apps and global npm CLIs (it never upgrades, and skips apps already in `/Applications`),
-2. installs uv and herdr with their own installers, then `latex2text` with uv for Neovim's Markdown rendering,
+2. installs `uv` with its own installer, then `latex2text` with uv for Neovim's Markdown rendering,
 3. moves any existing dotfile it would replace into `~/.dotfiles-backup/<timestamp>/`,
 4. links every package that isn't linked yet into `$HOME` with GNU Stow,
-5. installs the Claude Code plugin described [below](#claude-code-integration) and herdr's Claude Code integration.
+5. installs the Claude Code plugin described [below](#claude-code-integration) and herdr's Claude Code integration (in `--full`).
 
 Run `./install.sh --check` to see that report without changing anything.
 
-For a headless or always-on Mac (a home server, a remote exit node), `./install.sh --minimal`
-installs only [`Brewfile.minimal`](Brewfile.minimal): the shell and its tools, git, Neovim, yazi,
-btop and kitty with its fonts, about 1 GB instead of the full setup's tens of GB. It links the
-`bat git kitty lsd nvim starship yazi zsh` packages and skips uv, herdr and the Claude Code
-tooling. The choice is saved in `~/.config/dotfiles/profile`, so a plain rerun stays minimal;
-`./install.sh --full` switches that Mac to the full setup.
+Git identity (`[user]` name and email) is intentionally kept out of the repo via `include.path = ~/.gitconfig.local`. On each new Mac, create `~/.gitconfig.local` with that machine's personal or work email.
+
+Profiles (saved in `~/.config/dotfiles/profile`, so plain reruns keep the chosen profile; `--full` switches back):
+
+- `./install.sh --work` — lean work Mac setup ([`Brewfile.work`](Brewfile.work)): terminal (`kitty` + fonts), `herdr`, shell tools, git, Neovim, `yazi`, linters and `uv` only — no personal GUI apps, Mac App Store entries, kernel extensions or third-party AI tools. Links `bat git herdr kitty lsd nvim starship yazi zsh`.
+- `./install.sh --minimal` — headless or always-on Mac ([`Brewfile.minimal`](Brewfile.minimal)): shell tools, git, Neovim, `yazi`, `btop` and `kitty` with its fonts, about 1 GB. Links `bat git kitty lsd nvim starship yazi zsh` and skips `uv`, `herdr` and Claude Code tooling.
 
 Each top-level directory is a Stow package mirroring `$HOME`, so `kitty/.config/kitty/kitty.conf`
 becomes `~/.config/kitty/kitty.conf`. Edit files in the repo; the links pick changes up.
 
 ## Toolbox
 
-The tools I install first on any Mac, and why. `install.sh` installs all of them: the [`Brewfile`](Brewfile), plus herdr and uv through their own installers.
+The tools I install first on any Mac, and why. `install.sh` installs all of them: the [`Brewfile`](Brewfile), plus `uv` through its own installer.
 
 ### 🖥️ Terminal and agents
 
@@ -125,8 +125,6 @@ The tools I install first on any Mac, and why. `install.sh` installs all of them
 ### 🍎 Mac apps
 
 <table>
-<tr><td><a href="https://raycast.com"><img src="https://img.shields.io/badge/Raycast-f38ba8?style=for-the-badge&logo=raycast&logoColor=11111b" alt="Raycast"></a></td><td>Spotlight replacement: launcher, clipboard history, window snapping, snippets.</td></tr>
-<tr><td><a href="https://orbstack.dev"><img src="https://img.shields.io/badge/OrbStack-fab387?style=for-the-badge" alt="OrbStack"></a></td><td>Docker and Linux VMs that start in seconds and barely touch the battery.</td></tr>
 <tr><td><a href="https://xnipapp.com"><img src="https://img.shields.io/badge/Xnip-f9e2af?style=for-the-badge" alt="Xnip"></a></td><td>Screenshots with scrolling capture, annotation and pinning.</td></tr>
 <tr><td><a href="https://obsidian.md"><img src="https://img.shields.io/badge/Obsidian-cba6f7?style=for-the-badge&logo=obsidian&logoColor=11111b" alt="Obsidian"></a></td><td>Notes as plain Markdown files in a folder.</td></tr>
 <tr><td><a href="https://mos.caldis.me"><img src="https://img.shields.io/badge/Mos-a6e3a1?style=for-the-badge" alt="Mos"></a></td><td>Smooth scrolling for a regular mouse, with its own scroll direction.</td></tr>

@@ -1,7 +1,6 @@
 # Homebrew bundle: `brew bundle install` installs it all; keep it in sync with
 # `brew bundle dump`. Dependencies Homebrew pulls in on its own are left out.
 
-tap "fwartner/tap", trusted: true
 tap "supabase/tap", trusted: true
 tap "anomalyco/tap", trusted: true
 
@@ -71,7 +70,6 @@ brew "bottom"  # Yet another cross-platform graphical process/system monitor
 brew "dust"  # More intuitive version of du in rust
 brew "gdu"  # Disk usage analyzer with console interface written in Go
 brew "fastfetch"  # Like neofetch, but much faster because written mostly in C
-brew "fwartner/tap/mac-cleanup", trusted: true  # 🗑️ cleanup script for macos
 brew "mole"  # Deep clean and optimize your Mac
 cask "stats"  # System monitor for the menu bar
 
@@ -79,8 +77,8 @@ cask "stats"  # System monitor for the menu bar
 brew "yazi"  # Blazing fast terminal file manager written in Rust, based on async I/O
 
 # --- Terminal and editors ---
+brew "herdr"  # Terminal workspace manager for coding agents
 cask "kitty"  # GPU-based terminal emulator
-cask "zed"  # Multiplayer code editor
 cask "typora"  # Configurable document editor that supports Markdown
 
 # --- AI agents and models ---
@@ -91,7 +89,6 @@ brew "rtk"  # CLI proxy to minimize LLM token consumption
 brew "anomalyco/tap/opencode-v2", trusted: true  # AI coding agent for the terminal
 
 # --- Development ---
-cask "orbstack"  # Replacement for Docker Desktop
 cask "gcloud-cli"  # Set of tools to manage resources and applications hosted on Google Cloud
 cask "mitmproxy"  # Intercept, modify, replay, save HTTP/S traffic
 cask "macfuse"  # File system integration
@@ -112,7 +109,6 @@ cask "thaw"  # Menu bar manager
 cask "dockdoor"  # Window peeking utility app
 cask "only-switch"  # System and utility switches
 cask "squirrel-app"  # Rime input method engine
-cask "raycast"  # Control your tools with a few keystrokes
 cask "muse"  # AI assistant for managing tasks, projects, and long-term goals
 cask "keka"  # File archiver
 cask "mos"  # Smooths scrolling and set mouse scroll directions independently

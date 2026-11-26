@@ -100,37 +100,28 @@
 
   // ---- Languages ----
   // Python defaults to basedpyright + ruff (format, organize imports); Zed downloads them
-  // Go defaults to gofmt with hard tabs; Markdown soft-wraps by default
+  // Go defaults to gofmt with hard tabs; Markdown soft-wraps by default.
+  // Biome only activates in repos that have a biome.json/biome.jsonc so work repos
+  // using ESLint + Prettier keep working without formatter conflicts.
+  "lsp": {
+    "biome": {
+      "settings": {
+        "require_config_file": true
+      }
+    }
+  },
   "languages": {
     "Python": {
       "tab_size": 4
     },
-    // ESLint off for JS/TS; Biome lints, formats, fixes and organizes imports.
-    // typescript-language-server stays off as in Zed's defaults (listing servers
-    // replaces the default list, and "..." would otherwise re-enable it)
     "TypeScript": {
-      "language_servers": ["vtsls", "biome", "!typescript-language-server", "!eslint", "..."],
-      "formatter": { "language_server": { "name": "biome" } },
-      "code_actions_on_format": {
-        "source.fixAll.biome": true,
-        "source.organizeImports.biome": true
-      }
+      "language_servers": ["vtsls", "biome", "!typescript-language-server", "..."]
     },
     "TSX": {
-      "language_servers": ["vtsls", "biome", "!typescript-language-server", "!eslint", "..."],
-      "formatter": { "language_server": { "name": "biome" } },
-      "code_actions_on_format": {
-        "source.fixAll.biome": true,
-        "source.organizeImports.biome": true
-      }
+      "language_servers": ["vtsls", "biome", "!typescript-language-server", "..."]
     },
     "JavaScript": {
-      "language_servers": ["vtsls", "biome", "!typescript-language-server", "!eslint", "..."],
-      "formatter": { "language_server": { "name": "biome" } },
-      "code_actions_on_format": {
-        "source.fixAll.biome": true,
-        "source.organizeImports.biome": true
-      }
+      "language_servers": ["vtsls", "biome", "!typescript-language-server", "..."]
     }
   },
 
