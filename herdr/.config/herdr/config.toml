@@ -1,7 +1,7 @@
 onboarding = false
 
 # Over kitty's darker glass (Mocha crust) the default overlay0 pane borders fade;
-# brighten them, and use lavender for the focused pane like kitty and Zed
+# brighten them, and use lavender for the focused pane like kitty
 [theme.custom]
 overlay0 = "#9399b2"
 surface_dim = "#585b70"

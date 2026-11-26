@@ -95,12 +95,10 @@ cask "macfuse"  # File system integration
 
 # --- Browsers and AI apps ---
 cask "google-chrome"  # Web browser
-cask "firefox"  # Web browser
 cask "chatgpt"  # OpenAI's official ChatGPT desktop app
 cask "claude"  # Anthropic's official Claude AI desktop app
 
 # --- Productivity and notes ---
-cask "obsidian"  # Knowledge base that works on top of a local folder of plain text Markdown files
 cask "zotero"  # Collect, organise, cite, and share research sources
 cask "numi"  # Calculator and converter application
 cask "pronotes"  # Apple Notes extension
@@ -124,7 +122,7 @@ cask "telegram"  # Messaging app with a focus on speed and security
 cask "wechat"  # Free messaging and calling application
 cask "iina"  # Free and open-source media player
 
-# --- Fonts: Maple Mono NF (terminals) and NF CN (Zed, T3 Code, CJK in kitty) ---
+# --- Fonts: Maple Mono NF (terminals) and NF CN (T3 Code, CJK in kitty) ---
 cask "font-maple-mono-nf-cn"
 cask "font-maple-mono-nf"
 cask "font-maple-mono-normal-nf-cn"
