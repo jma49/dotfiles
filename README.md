@@ -1,7 +1,7 @@
 <h1 align="center">dotfiles</h1>
 
 <p align="center">
-  A complete macOS setup in one repo: terminal, editors, shell and apps,<br>
+  A complete macOS setup in one repo: terminal, editor, shell and apps,<br>
   in Catppuccin Mocha on frosted glass, built around running many Claude Code agents side by side.
 </p>
 
@@ -52,32 +52,47 @@ app, font and Mac App Store app, so one script turns a fresh Mac into this setup
 ## Install
 
 > [!NOTE]
-> Written for Apple Silicon Macs (Homebrew in `/opt/homebrew`). Sign in to the App Store first so
-> the `mas` entries in the Brewfile can install.
+> Written for Apple Silicon Macs (Homebrew in `/opt/homebrew`). For `--full`, sign in to the App Store
+> first so the `mas` entries in [`Brewfile`](Brewfile) can install (`--work` and `--minimal` skip App Store apps).
 
 ```bash
 git clone https://github.com/jma49/dotfiles.git ~/dotfiles
-cd ~/dotfiles && ./install.sh
+cd ~/dotfiles && ./install.sh          # full personal Mac
+# or: ./install.sh --work              # lean work Mac (terminal, shell, git, nvim, herdr, linters)
+# or: ./install.sh --minimal           # headless / always-on Mac (Mac mini exit node)
 ```
 
 `install.sh` starts with a preflight: it stops early unless this is an Apple Silicon Mac with the
 Xcode Command Line Tools and a network connection, then reports which steps are already done.
 It only does what is missing, so reruns are cheap and change nothing that is in place:
 
-1. installs Homebrew if needed, then whatever the [`Brewfile`](Brewfile) lists that isn't installed: CLI tools, apps, fonts, Mac App Store apps and global npm CLIs (it never upgrades, and skips apps already in `/Applications`),
-2. installs `uv` with its own installer, then `latex2text` with uv for Neovim's Markdown rendering,
+1. installs Homebrew if needed, then whatever the active profile's Brewfile lists that isn't installed (it never upgrades, and skips apps already in `/Applications`),
+2. installs `uv` with its own installer, then `latex2text` with uv for Neovim's Markdown rendering (skipped in `--minimal`),
 3. moves any existing dotfile it would replace into `~/.dotfiles-backup/<timestamp>/`,
-4. links every package that isn't linked yet into `$HOME` with GNU Stow,
-5. installs the Claude Code plugin described [below](#claude-code-integration) and herdr's Claude Code integration (in `--full`).
+4. links the profile's Stow packages into `$HOME`,
+5. installs the Claude Code plugin described [below](#claude-code-integration) and herdr's Claude Code integration (`--full` only).
 
-Run `./install.sh --check` to see that report without changing anything.
+Run `./install.sh --check` (or `./install.sh --work --check`) to see the preflight report without changing anything.
 
-Git identity (`[user]` name and email) is intentionally kept out of the repo via `include.path = ~/.gitconfig.local`. On each new Mac, create `~/.gitconfig.local` with that machine's personal or work email.
+### Profiles
 
-Profiles (saved in `~/.config/dotfiles/profile`, so plain reruns keep the chosen profile; `--full` switches back):
+The chosen profile is saved in `~/.config/dotfiles/profile`, so plain `./install.sh` reruns stay on that profile (`--full` switches back):
 
-- `./install.sh --work` — lean work Mac setup ([`Brewfile.work`](Brewfile.work)): terminal (`kitty` + fonts), `herdr`, shell tools, git, Neovim, `yazi`, linters and `uv` only — no personal GUI apps, Mac App Store entries, kernel extensions or third-party AI tools. Links `bat git herdr kitty lsd nvim starship yazi zsh`.
-- `./install.sh --minimal` — headless or always-on Mac ([`Brewfile.minimal`](Brewfile.minimal)): shell tools, git, Neovim, `yazi`, `btop` and `kitty` with its fonts, about 1 GB. Links `bat git kitty lsd nvim starship yazi zsh` and skips `uv`, `herdr` and Claude Code tooling.
+| Profile | Brewfile | Stow packages | Intended for |
+| --- | --- | --- | --- |
+| `--full` (default) | [`Brewfile`](Brewfile) | all packages (incl. `claude`) | Personal Mac: full CLI suite, desktop apps, AI tools, Mac App Store apps |
+| `--work` | [`Brewfile.work`](Brewfile.work) | `bat git herdr kitty lsd nvim starship yazi zsh` | Work Mac: lean terminal (`kitty` + fonts), `herdr`, shell, git, Neovim, `yazi`, linters and `uv` — no personal GUI apps, `mas`, kernel extensions or third-party AI tools |
+| `--minimal` | [`Brewfile.minimal`](Brewfile.minimal) | `bat git kitty lsd nvim starship yazi zsh` | Headless / always-on Mac (~1 GB): shell, git, Neovim, `yazi`, `btop`, `kitty` + fonts; skips `uv`, `herdr` and Claude Code tooling |
+
+### Per-machine Git identity
+
+`git/.gitconfig` intentionally omits `[user]` and includes `~/.gitconfig.local` instead so personal and work commits never share the same email. On each new Mac, create `~/.gitconfig.local`:
+
+```ini
+[user]
+	name = Your Name
+	email = you@example.com
+```
 
 Each top-level directory is a Stow package mirroring `$HOME`, so `kitty/.config/kitty/kitty.conf`
 becomes `~/.config/kitty/kitty.conf`. Edit files in the repo; the links pick changes up.
@@ -139,7 +154,7 @@ The tools I install first on any Mac, and why. `install.sh` installs all of them
 | [`zsh`](zsh) | antidote plugins, vi mode with cursor shapes, fzf with previews, zoxide, project jumper |
 | [`starship`](starship/.config/starship.toml) | Prompt: dim parent directories, bold repo root, one blue git segment |
 | [`nvim`](nvim/.config/nvim) | AstroNvim v6 on Catppuccin Mocha, tuned for a transparent background |
-| [`git`](git) | delta pager (side by side, Catppuccin Mocha), global ignores |
+| [`git`](git) | delta pager (side by side, Catppuccin Mocha), global ignores, per-machine identity via `~/.gitconfig.local` |
 | [`bat`](bat/.config/bat) · [`lsd`](lsd/.config/lsd) · [`yazi`](yazi/.config/yazi) | Catppuccin Mocha for the pager, `ls` and the file manager |
 | [`claude`](claude/.claude/dotfiles-plugins) | Claude Code plugin that reports each session's state to the tab bar |
 
@@ -161,8 +176,7 @@ Catppuccin is designed for opaque backgrounds, so a few colors move for glass:
 
 - **The tint is crust, not base.** A darker tint keeps the frost from turning milky and text crisp (craftzdog's Solarized Osaka uses the same trick).
 - **Dim text is lifted.** Secondary text in Neovim (file stats, git blame, inlay hints) moves from `surface`/`overlay0` to `overlay2`.
-- **Selection is solid.** An opaque, mid-tone lavender-hue color, solved per flavor to stand out from the glass with text on it at 4.5:1 or better.
-- **Accents are shared.** Lavender marks focus (kitty, herdr); the orange cursor matches across kitty.
+- **Accents are shared.** Lavender marks focus across kitty and herdr, paired with a high-visibility orange cursor in kitty.
 
 ## Keys
 
@@ -204,7 +218,7 @@ Left Option works as Alt; right Option still types special characters.
 | Keys | Action |
 | --- | --- |
 | `esc` | Normal mode (block cursor); insert mode shows a beam |
-| `alt+j` | Jump to a project in `~/Code`, `~/Code/personal`, `~/.config` or `~/dotfiles` |
+| `alt+j` | Jump to a project in `~/Code`, `~/Code/personal`, `~/Work`, `~/work`, `~/src`, `~/.config` or `~/dotfiles` |
 | `ctrl+t` / `alt+c` | Pick a file (bat preview) / a directory (tree preview) with fzf |
 | `ctrl+r` | Search history with fzf |
 | `y` | yazi, landing in the directory you leave it in |
@@ -250,6 +264,7 @@ Restart running sessions (or run `/reload-plugins`) to pick it up, and restart k
 | TOML formatting | taplo |
 | JSON parses | `jq empty` |
 | Python syntax | `py_compile` |
+| Profile Brewfiles (`Brewfile.minimal`, `Brewfile.work`) are subsets of `Brewfile` | `comm` |
 | Every package stows into an empty home | GNU Stow |
 | Brewfile parses and every package exists (macOS) | Homebrew |
 
